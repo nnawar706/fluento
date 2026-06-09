@@ -1,5 +1,5 @@
 import { useAuth, useClerk } from "@clerk/expo";
-import { Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
 import { colors, fontFamily } from "@/constants/theme";
 
@@ -23,6 +23,13 @@ export default function Index() {
     <View style={styles.center}>
       <Text style={styles.title}>Fluento</Text>
       <TouchableOpacity
+        style={styles.chooseLanguageBtn}
+        activeOpacity={0.85}
+        onPress={() => router.push("/language-selection")}
+      >
+        <Text style={styles.chooseLanguageText}>Choose a Language</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
         style={styles.signOutBtn}
         activeOpacity={0.85}
         onPress={() => signOut()}
@@ -45,9 +52,21 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: colors.primary,
   },
-  signOutBtn: {
+  chooseLanguageBtn: {
     marginTop: 24,
     backgroundColor: colors.primary,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  chooseLanguageText: {
+    fontFamily: fontFamily.semiBold,
+    fontSize: 16,
+    color: colors.canvas,
+  },
+  signOutBtn: {
+    marginTop: 12,
+    backgroundColor: colors.surface,
     paddingHorizontal: 28,
     paddingVertical: 14,
     borderRadius: 14,
@@ -55,6 +74,6 @@ const styles = StyleSheet.create({
   signOutText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.canvas,
+    color: colors.inkMuted,
   },
 });
