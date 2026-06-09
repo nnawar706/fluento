@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { images } from "@/constants/images";
 import { colors, fontFamily, fontSize } from "@/constants/theme";
 
@@ -52,7 +53,11 @@ export default function Onboarding() {
         </View>
 
         {/* CTA Button */}
-        <TouchableOpacity style={styles.button} activeOpacity={0.85}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.85}
+          onPress={() => router.push("/sign-up")}
+        >
           <Text style={styles.buttonText}>Get Started</Text>
           <Ionicons name="chevron-forward" size={20} color={colors.canvas} style={{ marginLeft: 6 }} />
         </TouchableOpacity>
