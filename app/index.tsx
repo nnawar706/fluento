@@ -1,31 +1,58 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { router } from "expo-router";
+import { useAuth, useClerk } from "@clerk/expo";
+import { Redirect } from "expo-router";
+import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
 import { colors, fontFamily } from "@/constants/theme";
 
 export default function Index() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const { signOut } = useClerk();
+
+  if (!isLoaded) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isSignedIn) {
+    return <Redirect href="/onboarding" />;
+  }
+
   return (
-    <View className="flex-1 justify-center items-center bg-canvas">
-      <Text className="type-h1 text-primary">Fluento</Text>
+    <View style={styles.center}>
+      <Text style={styles.title}>Fluento</Text>
       <TouchableOpacity
-        style={styles.link}
-        activeOpacity={0.8}
-        onPress={() => router.push("/onboarding")}
+        style={styles.signOutBtn}
+        activeOpacity={0.85}
+        onPress={() => signOut()}
       >
-        <Text style={styles.linkText}>View Onboarding →</Text>
+        <Text style={styles.signOutText}>Sign Out</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  link: {
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.canvas,
+  },
+  title: {
+    fontFamily: fontFamily.bold,
+    fontSize: 32,
+    color: colors.primary,
+  },
+  signOutBtn: {
     marginTop: 24,
     backgroundColor: colors.primary,
     paddingHorizontal: 28,
     paddingVertical: 14,
     borderRadius: 14,
   },
-  linkText: {
+  signOutText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
     color: colors.canvas,

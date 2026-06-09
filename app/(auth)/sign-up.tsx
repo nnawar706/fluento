@@ -8,18 +8,90 @@ import {
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
+import { router, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { useSignUp, useSSO } from "@clerk/expo";
 import { images } from "@/constants/images";
 import { colors, fontFamily, fontSize } from "@/constants/theme";
 import VerificationModal from "@/components/VerificationModal";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function SignUp() {
+  const { signUp, errors, fetchStatus } = useSignUp();
+
+  const { startSSOFlow } = useSSO();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [verifyError, setVerifyError] = useState("");
+
+  useEffect(() => {
+    void WebBrowser.warmUpAsync();
+    return () => { void WebBrowser.coolDownAsync(); };
+  }, []);
+
+  const handleSignUp = async () => {
+    if (!signUp || fetchStatus === "fetching") return;
+    setVerifyError("");
+
+    const { error } = await signUp.password({ emailAddress: email, password });
+    if (error) return;
+
+    await signUp.verifications.sendEmailCode();
+    setModalVisible(true);
+  };
+
+  const handleVerify = async (code: string) => {
+    if (!signUp) return;
+    setVerifyError("");
+
+    await signUp.verifications.verifyEmailCode({ code });
+
+    if (signUp.status === "complete") {
+      await signUp.finalize({
+        navigate: ({ session, decorateUrl }) => {
+          if (session?.currentTask) return;
+          const url = decorateUrl("/");
+          if (!url.startsWith("http")) {
+            router.replace(url as Href);
+          }
+        },
+      });
+    } else {
+      setVerifyError("Verification failed. Please try again.");
+    }
+  };
+
+  const handleResend = async () => {
+    if (!signUp) return;
+    await signUp.verifications.sendEmailCode();
+  };
+
+  const handleOAuth = async (strategy: "oauth_google" | "oauth_apple") => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy,
+        redirectUrl: Linking.createURL("/"),
+      });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+        router.replace("/");
+      }
+    } catch (err: any) {
+      console.error(
+        "OAuth error:",
+        err?.errors?.[0]?.longMessage ?? err?.message ?? err
+      );
+    }
+  };
+
+  const isLoading = fetchStatus === "fetching";
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.canvas }}>
@@ -62,8 +134,12 @@ export default function SignUp() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            editable={!isLoading}
           />
         </View>
+        {errors?.fields?.emailAddress ? (
+          <Text style={styles.fieldError}>{errors.fields.emailAddress.message}</Text>
+        ) : null}
 
         {/* Password field */}
         <View style={[styles.inputContainer, styles.passwordContainer]}>
@@ -76,6 +152,7 @@ export default function SignUp() {
               placeholder="••••••••"
               placeholderTextColor={colors.border}
               secureTextEntry={!showPassword}
+              editable={!isLoading}
             />
             <TouchableOpacity
               onPress={() => setShowPassword((v) => !v)}
@@ -90,14 +167,20 @@ export default function SignUp() {
             </TouchableOpacity>
           </View>
         </View>
+        {errors?.fields?.password ? (
+          <Text style={styles.fieldError}>{errors.fields.password.message}</Text>
+        ) : null}
 
         {/* Sign Up button */}
         <TouchableOpacity
-          style={styles.primaryBtn}
+          style={[styles.primaryBtn, (isLoading || !email || !password) && styles.primaryBtnDisabled]}
           activeOpacity={0.85}
-          onPress={() => setModalVisible(true)}
+          onPress={handleSignUp}
+          disabled={isLoading || !email || !password}
         >
-          <Text style={styles.primaryBtnText}>Sign Up</Text>
+          <Text style={styles.primaryBtnText}>
+            {isLoading ? "Please wait…" : "Sign Up"}
+          </Text>
         </TouchableOpacity>
 
         {/* Divider */}
@@ -112,14 +195,12 @@ export default function SignUp() {
           <SocialButton
             icon={<Ionicons name="logo-google" size={20} color="#EA4335" />}
             label="Continue with Google"
-          />
-          <SocialButton
-            icon={<Ionicons name="logo-facebook" size={20} color="#1877F2" />}
-            label="Continue with Facebook"
+            onPress={() => handleOAuth("oauth_google")}
           />
           <SocialButton
             icon={<Ionicons name="logo-apple" size={20} color={colors.ink} />}
             label="Continue with Apple"
+            onPress={() => handleOAuth("oauth_apple")}
           />
         </View>
 
@@ -133,12 +214,19 @@ export default function SignUp() {
             <Text style={styles.footerLink}>Log in</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Required for Clerk bot protection */}
+        <View nativeID="clerk-captcha" />
       </ScrollView>
 
       <VerificationModal
         visible={modalVisible}
         email={email}
         onClose={() => setModalVisible(false)}
+        onVerify={handleVerify}
+        onResend={handleResend}
+        error={verifyError || errors?.fields?.code?.message}
+        loading={isLoading}
       />
     </SafeAreaView>
   );
@@ -147,12 +235,14 @@ export default function SignUp() {
 function SocialButton({
   icon,
   label,
+  onPress,
 }: {
   icon: React.ReactNode;
   label: string;
+  onPress: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8}>
+    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8} onPress={onPress}>
       <View style={styles.socialIconWrap}>{icon}</View>
       <Text style={styles.socialBtnText}>{label}</Text>
     </TouchableOpacity>
@@ -195,10 +285,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 12,
-    marginBottom: 12,
+    marginBottom: 4,
   },
   passwordContainer: {
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: 4,
   },
   inputLabel: {
     fontFamily: fontFamily.medium,
@@ -220,12 +311,23 @@ const styles = StyleSheet.create({
   eyeBtn: {
     padding: 4,
   },
+  fieldError: {
+    fontFamily: fontFamily.regular,
+    fontSize: 12,
+    color: colors.error,
+    marginBottom: 8,
+    marginLeft: 4,
+  },
   primaryBtn: {
     backgroundColor: colors.primary,
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 12,
+  },
+  primaryBtnDisabled: {
+    opacity: 0.55,
   },
   primaryBtnText: {
     fontFamily: fontFamily.semiBold,

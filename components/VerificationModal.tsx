@@ -7,9 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { useRef, useState, useEffect } from "react";
-import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, fontFamily, fontSize } from "@/constants/theme";
 
@@ -17,9 +17,21 @@ interface Props {
   visible: boolean;
   email: string;
   onClose: () => void;
+  onVerify: (code: string) => void;
+  onResend?: () => void;
+  error?: string;
+  loading?: boolean;
 }
 
-export default function VerificationModal({ visible, email, onClose }: Props) {
+export default function VerificationModal({
+  visible,
+  email,
+  onClose,
+  onVerify,
+  onResend,
+  error,
+  loading = false,
+}: Props) {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputs = useRef<(TextInput | null)[]>([]);
 
@@ -30,7 +42,7 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
   }, [visible]);
 
   const handleChange = (text: string, index: number) => {
-    if (!/^\d*$/.test(text)) return;
+    if (!/^\d*$/.test(text) || loading) return;
 
     const digit = text.slice(-1);
     const newCode = [...code];
@@ -42,10 +54,7 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
     }
 
     if (newCode.every((d) => d !== "") && digit) {
-      setTimeout(() => {
-        onClose();
-        router.replace("/");
-      }, 250);
+      onVerify(newCode.join(""));
     }
   };
 
@@ -94,31 +103,47 @@ export default function VerificationModal({ visible, email, onClose }: Props) {
             <Text style={styles.emailText}>{email || "your email"}</Text>
           </Text>
 
-          <View style={styles.codeRow}>
-            {code.map((digit, i) => (
-              <TextInput
-                key={i}
-                ref={(el) => {
-                  inputs.current[i] = el;
-                }}
-                style={[styles.codeBox, digit ? styles.codeBoxActive : null]}
-                value={digit}
-                onChangeText={(t) => handleChange(t, i)}
-                onKeyPress={({ nativeEvent }) =>
-                  handleKeyPress(nativeEvent.key, i)
-                }
-                keyboardType="number-pad"
-                maxLength={1}
-                textAlign="center"
-                returnKeyType="done"
-                selectionColor={colors.primary}
-              />
-            ))}
-          </View>
+          {loading ? (
+            <View style={styles.loadingWrap}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : (
+            <View style={styles.codeRow}>
+              {code.map((digit, i) => (
+                <TextInput
+                  key={i}
+                  ref={(el) => {
+                    inputs.current[i] = el;
+                  }}
+                  style={[styles.codeBox, digit ? styles.codeBoxActive : null]}
+                  value={digit}
+                  onChangeText={(t) => handleChange(t, i)}
+                  onKeyPress={({ nativeEvent }) =>
+                    handleKeyPress(nativeEvent.key, i)
+                  }
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  textAlign="center"
+                  returnKeyType="done"
+                  selectionColor={colors.primary}
+                  editable={!loading}
+                />
+              ))}
+            </View>
+          )}
+
+          {error ? (
+            <Text style={styles.errorText}>{error}</Text>
+          ) : null}
 
           <Text style={styles.resend}>
             Didn't receive it?{" "}
-            <Text style={styles.resendLink}>Resend code</Text>
+            <Text
+              style={styles.resendLink}
+              onPress={onResend}
+            >
+              Resend code
+            </Text>
           </Text>
         </View>
       </KeyboardAvoidingView>
@@ -181,6 +206,11 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 24,
   },
+  loadingWrap: {
+    height: 54,
+    marginBottom: 24,
+    justifyContent: "center",
+  },
   codeBox: {
     width: 46,
     height: 54,
@@ -195,6 +225,14 @@ const styles = StyleSheet.create({
   codeBoxActive: {
     borderColor: colors.primary,
     backgroundColor: "#ede9fe",
+  },
+  errorText: {
+    fontFamily: fontFamily.regular,
+    fontSize: 13,
+    color: colors.error,
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: -12,
   },
   resend: {
     fontFamily: fontFamily.regular,

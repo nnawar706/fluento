@@ -8,16 +8,108 @@ import {
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
+import { router, type Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { useSignIn, useSSO } from "@clerk/expo";
 import { images } from "@/constants/images";
 import { colors, fontFamily, fontSize } from "@/constants/theme";
 import VerificationModal from "@/components/VerificationModal";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function SignIn() {
+  const { signIn, errors, fetchStatus } = useSignIn();
+
+  const { startSSOFlow } = useSSO();
+
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [verifyError, setVerifyError] = useState("");
+
+  useEffect(() => {
+    void WebBrowser.warmUpAsync();
+    return () => { void WebBrowser.coolDownAsync(); };
+  }, []);
+
+  const navigateHome = (decorateUrl: (url: string) => string) => {
+    const url = decorateUrl("/");
+    if (!url.startsWith("http")) {
+      router.replace(url as Href);
+    }
+  };
+
+  const handleSignIn = async () => {
+    if (!signIn || fetchStatus === "fetching") return;
+    setVerifyError("");
+
+    const { error } = await signIn.password({ emailAddress: email, password });
+    if (error) return;
+
+    if (signIn.status === "complete") {
+      await signIn.finalize({
+        navigate: ({ session, decorateUrl }) => {
+          if (session?.currentTask) return;
+          navigateHome(decorateUrl);
+        },
+      });
+    } else if (signIn.status === "needs_client_trust") {
+      const emailCodeFactor = signIn.supportedSecondFactors?.find(
+        (f) => f.strategy === "email_code"
+      );
+      if (emailCodeFactor) {
+        await signIn.mfa.sendEmailCode();
+        setModalVisible(true);
+      }
+    }
+  };
+
+  const handleVerify = async (code: string) => {
+    if (!signIn) return;
+    setVerifyError("");
+
+    await signIn.mfa.verifyEmailCode({ code });
+
+    if (signIn.status === "complete") {
+      await signIn.finalize({
+        navigate: ({ session, decorateUrl }) => {
+          if (session?.currentTask) return;
+          navigateHome(decorateUrl);
+        },
+      });
+    } else {
+      setVerifyError("Verification failed. Please try again.");
+    }
+  };
+
+  const handleResend = async () => {
+    if (!signIn) return;
+    await signIn.mfa.sendEmailCode();
+  };
+
+  const handleOAuth = async (strategy: "oauth_google" | "oauth_apple") => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy,
+        redirectUrl: Linking.createURL("/"),
+      });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+        router.replace("/");
+      }
+    } catch (err: any) {
+      console.error(
+        "OAuth error:",
+        err?.errors?.[0]?.longMessage ?? err?.message ?? err
+      );
+    }
+  };
+
+  const isLoading = fetchStatus === "fetching";
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.canvas }}>
@@ -60,16 +152,53 @@ export default function SignIn() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
+            editable={!isLoading}
           />
         </View>
+        {errors?.fields?.identifier ? (
+          <Text style={styles.fieldError}>{errors.fields.identifier.message}</Text>
+        ) : null}
+
+        {/* Password field */}
+        <View style={[styles.inputContainer, styles.passwordContainer]}>
+          <Text style={styles.inputLabel}>Password</Text>
+          <View style={styles.passwordRow}>
+            <TextInput
+              style={[styles.textInput, { flex: 1 }]}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="••••••••"
+              placeholderTextColor={colors.border}
+              secureTextEntry={!showPassword}
+              editable={!isLoading}
+            />
+            <TouchableOpacity
+              onPress={() => setShowPassword((v) => !v)}
+              activeOpacity={0.7}
+              style={styles.eyeBtn}
+            >
+              <Ionicons
+                name={showPassword ? "eye-outline" : "eye-off-outline"}
+                size={20}
+                color={colors.inkMuted}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {errors?.fields?.password ? (
+          <Text style={styles.fieldError}>{errors.fields.password.message}</Text>
+        ) : null}
 
         {/* Sign In button */}
         <TouchableOpacity
-          style={[styles.primaryBtn, { marginTop: 8 }]}
+          style={[styles.primaryBtn, { marginTop: 12 }, (isLoading || !email || !password) && styles.primaryBtnDisabled]}
           activeOpacity={0.85}
-          onPress={() => setModalVisible(true)}
+          onPress={handleSignIn}
+          disabled={isLoading || !email || !password}
         >
-          <Text style={styles.primaryBtnText}>Sign In</Text>
+          <Text style={styles.primaryBtnText}>
+            {isLoading ? "Please wait…" : "Sign In"}
+          </Text>
         </TouchableOpacity>
 
         {/* Divider */}
@@ -84,14 +213,12 @@ export default function SignIn() {
           <SocialButton
             icon={<Ionicons name="logo-google" size={20} color="#EA4335" />}
             label="Continue with Google"
-          />
-          <SocialButton
-            icon={<Ionicons name="logo-facebook" size={20} color="#1877F2" />}
-            label="Continue with Facebook"
+            onPress={() => handleOAuth("oauth_google")}
           />
           <SocialButton
             icon={<Ionicons name="logo-apple" size={20} color={colors.ink} />}
             label="Continue with Apple"
+            onPress={() => handleOAuth("oauth_apple")}
           />
         </View>
 
@@ -107,10 +234,15 @@ export default function SignIn() {
         </View>
       </ScrollView>
 
+      {/* Modal shown only when MFA (email code 2FA) is required */}
       <VerificationModal
         visible={modalVisible}
         email={email}
         onClose={() => setModalVisible(false)}
+        onVerify={handleVerify}
+        onResend={handleResend}
+        error={verifyError || errors?.fields?.code?.message}
+        loading={isLoading}
       />
     </SafeAreaView>
   );
@@ -119,12 +251,14 @@ export default function SignIn() {
 function SocialButton({
   icon,
   label,
+  onPress,
 }: {
   icon: React.ReactNode;
   label: string;
+  onPress: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8}>
+    <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8} onPress={onPress}>
       <View style={styles.socialIconWrap}>{icon}</View>
       <Text style={styles.socialBtnText}>{label}</Text>
     </TouchableOpacity>
@@ -167,7 +301,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 12,
-    marginBottom: 12,
+    marginBottom: 4,
+  },
+  passwordContainer: {
+    marginTop: 8,
+    marginBottom: 4,
   },
   inputLabel: {
     fontFamily: fontFamily.medium,
@@ -182,12 +320,29 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
+  passwordRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  eyeBtn: {
+    padding: 4,
+  },
+  fieldError: {
+    fontFamily: fontFamily.regular,
+    fontSize: 12,
+    color: colors.error,
+    marginBottom: 8,
+    marginLeft: 4,
+  },
   primaryBtn: {
     backgroundColor: colors.primary,
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: "center",
     justifyContent: "center",
+  },
+  primaryBtnDisabled: {
+    opacity: 0.55,
   },
   primaryBtnText: {
     fontFamily: fontFamily.semiBold,
