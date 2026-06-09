@@ -1,53 +1,56 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Lingua Design Tokens
+ * Mirror of global.css @theme values — use these in StyleSheet contexts
+ * (SafeAreaView, dynamic styles, Animated values, platform-specific code)
  */
 
-import { Platform } from 'react-native';
+export const colors = {
+  // Primary brand
+  primary: "#6c4ef5",
+  primaryDeep: "#5b3bf6",
+  linguaBlue: "#4d88ff",
+  linguaGreen: "#21c16b",
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+  // Semantic
+  success: "#21c16b",
+  warning: "#ffcb00",
+  streak: "#ff8a00",
+  error: "#ff4d4f",
+  info: "#4d88ff",
 
-export const Colors = {
-  light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
-};
+  // Neutrals
+  ink: "#001328",
+  inkMuted: "#6b7280",
+  border: "#e5e7eb",
+  surface: "#f6f7fb",
+  canvas: "#ffffff",
+} as const;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+export const fontFamily = {
+  regular: "Poppins-Regular",
+  medium: "Poppins-Medium",
+  semiBold: "Poppins-SemiBold",
+  bold: "Poppins-Bold",
+} as const;
+
+export const fontSize = {
+  h1: 32,
+  h2: 24,
+  h3: 20,
+  h4: 16,
+  bodyLg: 16,
+  bodyMd: 14,
+  bodySm: 13,
+  caption: 11,
+} as const;
+
+export const lineHeight = {
+  h1: 38,   // 32 × 1.2
+  h2: 31,   // 24 × 1.3
+  h3: 26,   // 20 × 1.3
+  h4: 22,   // 16 × 1.4
+  bodyLg: 26, // 16 × 1.6
+  bodyMd: 22, // 14 × 1.6
+  bodySm: 21, // 13 × 1.6
+  caption: 15, // 11 × 1.4
+} as const;
