@@ -14,10 +14,13 @@ import { router } from "expo-router";
 import { languages } from "@/data/languages";
 import { images } from "@/constants/images";
 import { colors, fontFamily } from "@/constants/theme";
+import { useLanguageStore } from "@/store/languageStore";
 
 export default function LanguageSelection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const setSelectedLanguage = useLanguageStore((s) => s.setSelectedLanguage);
+  const canGoBack = router.canGoBack();
 
   const filtered = useMemo(
     () =>
@@ -35,13 +38,17 @@ export default function LanguageSelection() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.canvas }}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backBtn}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="chevron-back" size={24} color={colors.ink} />
-        </TouchableOpacity>
+        {canGoBack ? (
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.backBtn}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-back" size={24} color={colors.ink} />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.backBtn} />
+        )}
         <Text style={styles.headerTitle}>Choose a language</Text>
         <View style={styles.headerRight} />
       </View>
@@ -120,7 +127,12 @@ export default function LanguageSelection() {
           style={[styles.confirmBtn, !selectedId && styles.confirmBtnDisabled]}
           activeOpacity={0.85}
           disabled={!selectedId}
-          onPress={() => router.back()}
+          onPress={() => {
+            if (selectedLanguage) {
+              setSelectedLanguage(selectedLanguage);
+              router.replace("/");
+            }
+          }}
         >
           <Text style={styles.confirmBtnText}>
             {selectedLanguage
