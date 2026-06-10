@@ -42,7 +42,21 @@
       "@clerk/expo",
       "expo-secure-store",
       "expo-web-browser",
-      "expo-localization"
+      "expo-localization",
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "Fluento needs camera access for video lessons",
+          "microphonePermission": "Fluento needs microphone access to practice speaking"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": { "minSdkVersion": 24 }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

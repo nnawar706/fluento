@@ -1,10 +1,13 @@
 import { images } from "@/constants/images";
 import { colors, fontFamily } from "@/constants/theme";
 import { getLessonById } from "@/data/lessons";
+import { useStreamCall } from "@/hooks/useStreamCall";
+import { useAuth, useUser } from "@clerk/expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Platform,
   StyleSheet,
@@ -14,27 +17,70 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// ── Status indicator config keyed by call state ────────────────────────────────
+const STATUS_CONFIG = {
+  idle: { color: "#9ca3af", label: "Preparing..." },
+  connecting: { color: "#f59e0b", label: "Connecting..." },
+  joined: { color: colors.linguaGreen, label: "Connected" },
+  error: { color: colors.error, label: "Connection failed" },
+  ended: { color: "#9ca3af", label: "Session ended" },
+} as const;
+
 export default function AudioLessonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const lesson = getLessonById(id ?? "");
 
-  const [isMicActive, setIsMicActive] = useState(true);
-  const [isCameraOn, setIsCameraOn] = useState(false);
-  const [showSubtitles, setShowSubtitles] = useState(false);
-  const [sessionSeconds, setSessionSeconds] = useState(0);
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const { user, isLoaded: userLoaded } = useUser();
+  const { getToken } = useAuth();
 
+  // ── Session timer (only ticks while joined) ──────────────────────────────────
+  const [sessionSeconds, setSessionSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ── Current phrase cycling ───────────────────────────────────────────────────
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+  // ── Stream call ──────────────────────────────────────────────────────────────
+  const callId = lesson
+    ? `lesson-${lesson.id.replace(/[^a-z0-9-]/g, "-")}-${user?.id ?? "anon"}`
+    : "lesson-default";
+
+  const { callState, errorMessage, isMuted, startCall, toggleMute, endCall } =
+    useStreamCall({
+      callId,
+      userName: user?.firstName ?? user?.username ?? "Student",
+      userImage: user?.imageUrl,
+      getClerkToken: () => getToken(),
+    });
+
+  // Auto-start the call once user + lesson are ready
   useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setSessionSeconds((s) => s + 1);
-    }, 1000);
+    if (userLoaded && user && lesson) {
+      startCall();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLoaded]);
+
+  // Session timer — only counts while in the call
+  useEffect(() => {
+    if (callState === "joined") {
+      timerRef.current = setInterval(() => {
+        setSessionSeconds((s) => s + 1);
+      }, 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, [callState]);
+
+  // ── End call and navigate back ───────────────────────────────────────────────
+  const handleEndCall = async () => {
+    await endCall();
+    router.back();
+  };
 
   if (!lesson) {
     return (
@@ -49,18 +95,16 @@ export default function AudioLessonScreen() {
   const phrases = lesson.phrases;
   const currentPhrase = phrases[currentPhraseIndex % phrases.length];
   const sessionMinutes = Math.floor(sessionSeconds / 60);
-
-  const handleNextPhrase = () => {
-    setCurrentPhraseIndex((i) => (i + 1) % phrases.length);
-  };
+  const status = STATUS_CONFIG[callState];
+  const micActive = callState === "joined" && !isMuted;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      {/* ── Header ────────────────────────────────────────────── */}
+      {/* ── Header ──────────────────────────────────────────────────────────── */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={handleEndCall}
           activeOpacity={0.7}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
@@ -70,17 +114,23 @@ export default function AudioLessonScreen() {
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>AI Buddy</Text>
           <View style={styles.onlineRow}>
-            <View style={styles.onlineDot} />
-            <Text style={styles.onlineText}>Online</Text>
+            <View style={[styles.statusDot, { backgroundColor: status.color }]} />
+            <Text style={[styles.statusText, { color: status.color }]}>
+              {callState === "joined" && isMuted ? "Muted" : status.label}
+            </Text>
           </View>
         </View>
 
         <View style={styles.headerRight}>
-          <Ionicons
-            name="videocam-outline"
-            size={20}
-            color={colors.inkMuted}
-          />
+          {callState === "connecting" ? (
+            <ActivityIndicator size="small" color={colors.primary} />
+          ) : (
+            <Ionicons
+              name="videocam-outline"
+              size={20}
+              color={colors.inkMuted}
+            />
+          )}
           <Text style={styles.sessionTime}>{sessionMinutes} min</Text>
           <Ionicons
             name="notifications-outline"
@@ -90,22 +140,50 @@ export default function AudioLessonScreen() {
         </View>
       </View>
 
-      {/* ── Teaching Area ──────────────────────────────────────── */}
+      {/* ── Teaching Area ────────────────────────────────────────────────────── */}
       <View style={styles.teachingArea}>
-        {/* Mascot area fills available space */}
         <View style={styles.mascotArea}>
           <Image
             source={images.mascotLogo}
             style={styles.mascot}
             resizeMode="contain"
           />
-          {/* User thumbnail overlaid top-right */}
+
+          {/* User thumbnail — shows avatar or person icon */}
           <View style={styles.userThumbnail}>
-            <Ionicons name="person" size={28} color="#9880f0" />
+            {user?.imageUrl ? (
+              <Image
+                source={{ uri: user.imageUrl }}
+                style={styles.userAvatar}
+                resizeMode="cover"
+              />
+            ) : (
+              <Ionicons name="person" size={28} color="#9880f0" />
+            )}
+
+            {/* Muted indicator on thumbnail */}
+            {isMuted && (
+              <View style={styles.mutedBadge}>
+                <Ionicons name="mic-off" size={10} color="#fff" />
+              </View>
+            )}
           </View>
         </View>
 
-        {/* Teacher response bubble pinned to bottom */}
+        {/* Error state overlay */}
+        {callState === "error" && (
+          <View style={styles.errorBanner}>
+            <Ionicons name="warning-outline" size={14} color="#fff" />
+            <Text style={styles.errorText} numberOfLines={1}>
+              {errorMessage}
+            </Text>
+            <TouchableOpacity onPress={startCall} activeOpacity={0.8}>
+              <Text style={styles.retryText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Phrase speech bubble pinned to the bottom of the teaching area */}
         <View style={styles.speechRow}>
           <View style={styles.speechBubble}>
             <Text style={styles.speechPhrase}>{currentPhrase.phrase}</Text>
@@ -118,7 +196,9 @@ export default function AudioLessonScreen() {
           </View>
           <TouchableOpacity
             style={styles.speakerBtn}
-            onPress={handleNextPhrase}
+            onPress={() =>
+              setCurrentPhraseIndex((i) => (i + 1) % phrases.length)
+            }
             activeOpacity={0.7}
           >
             <Ionicons name="volume-high" size={18} color={colors.primary} />
@@ -126,48 +206,44 @@ export default function AudioLessonScreen() {
         </View>
       </View>
 
-      {/* ── Controls ──────────────────────────────────────────── */}
+      {/* ── Controls ─────────────────────────────────────────────────────────── */}
       <View style={styles.controls}>
+        {/* Camera — disabled for audio-only lessons */}
         <TouchableOpacity
-          style={[styles.controlBtn, isCameraOn && styles.controlBtnActive]}
-          onPress={() => setIsCameraOn((v) => !v)}
+          style={styles.controlBtn}
           activeOpacity={0.75}
           disabled
         >
           <Ionicons
-            name={isCameraOn ? "videocam" : "videocam-outline"}
+            name="videocam-outline"
             size={22}
-            color={isCameraOn ? "#fff" : colors.inkMuted}
+            color={colors.inkMuted}
           />
         </TouchableOpacity>
 
+        {/* Microphone — wired to Stream call */}
         <TouchableOpacity
-          style={[styles.controlBtn, isMicActive && styles.controlBtnActive]}
-          onPress={() => setIsMicActive((v) => !v)}
+          style={[styles.controlBtn, micActive && styles.controlBtnActive]}
+          onPress={toggleMute}
           activeOpacity={0.75}
+          disabled={callState !== "joined"}
         >
           <Ionicons
-            name={isMicActive ? "mic" : "mic-off"}
+            name={micActive ? "mic" : "mic-off"}
             size={22}
-            color={isMicActive ? "#fff" : colors.inkMuted}
+            color={micActive ? "#fff" : colors.inkMuted}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.controlBtn, showSubtitles && styles.controlBtnActive]}
-          onPress={() => setShowSubtitles((v) => !v)}
-          activeOpacity={0.75}
-        >
-          <Ionicons
-            name="text"
-            size={22}
-            color={showSubtitles ? "#fff" : colors.inkMuted}
-          />
+        {/* Subtitles toggle (UI only for now) */}
+        <TouchableOpacity style={styles.controlBtn} activeOpacity={0.75}>
+          <Ionicons name="text" size={22} color={colors.inkMuted} />
         </TouchableOpacity>
 
+        {/* End call */}
         <TouchableOpacity
           style={styles.endCallBtn}
-          onPress={() => router.back()}
+          onPress={handleEndCall}
           activeOpacity={0.75}
         >
           <View style={styles.endCallIconWrap}>
@@ -176,26 +252,26 @@ export default function AudioLessonScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* ── Lesson Feedback ────────────────────────────────────── */}
+      {/* ── Lesson Feedback ──────────────────────────────────────────────────── */}
       <View style={styles.feedback}>
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Speaking</Text>
           <Text style={[styles.feedbackValue, { color: colors.linguaGreen }]}>
-            Excellent
+            {callState === "joined" ? "Excellent" : "—"}
           </Text>
         </View>
         <View style={styles.feedbackDivider} />
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Pronunciation</Text>
           <Text style={[styles.feedbackValue, { color: colors.linguaGreen }]}>
-            Great
+            {callState === "joined" ? "Great" : "—"}
           </Text>
         </View>
         <View style={styles.feedbackDivider} />
         <View style={styles.feedbackItem}>
           <Text style={styles.feedbackLabel}>Grammar</Text>
           <Text style={[styles.feedbackValue, { color: colors.warning }]}>
-            Good
+            {callState === "joined" ? "Good" : "—"}
           </Text>
         </View>
       </View>
@@ -229,7 +305,7 @@ const styles = StyleSheet.create({
     color: colors.inkMuted,
   },
 
-  // ── Header ──────────────────────────────────────────────────────
+  // ── Header ────────────────────────────────────────────────────────────────
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -261,16 +337,14 @@ const styles = StyleSheet.create({
     gap: 5,
     marginTop: 2,
   },
-  onlineDot: {
+  statusDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.linguaGreen,
   },
-  onlineText: {
+  statusText: {
     fontFamily: fontFamily.regular,
     fontSize: 12,
-    color: colors.linguaGreen,
   },
   headerRight: {
     flexDirection: "row",
@@ -285,7 +359,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  // ── Teaching Area ────────────────────────────────────────────────
+  // ── Teaching Area ──────────────────────────────────────────────────────────
   teachingArea: {
     flex: 1,
     backgroundColor: "#ede9fe",
@@ -313,6 +387,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 2,
+    overflow: "hidden",
     ...Platform.select({
       ios: {
         shadowColor: "#000",
@@ -322,6 +397,48 @@ const styles = StyleSheet.create({
       },
       android: { elevation: 4 },
     }),
+  },
+  userAvatar: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 14,
+  },
+  mutedBadge: {
+    position: "absolute",
+    bottom: 6,
+    right: 6,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: colors.error,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorBanner: {
+    position: "absolute",
+    bottom: 68,
+    left: 12,
+    right: 52,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "rgba(239,68,68,0.9)",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    zIndex: 3,
+  },
+  errorText: {
+    flex: 1,
+    fontFamily: fontFamily.regular,
+    fontSize: 11,
+    color: "#fff",
+  },
+  retryText: {
+    fontFamily: fontFamily.semiBold,
+    fontSize: 11,
+    color: "#fff",
+    textDecorationLine: "underline",
   },
   speechRow: {
     flexDirection: "row",
@@ -366,7 +483,7 @@ const styles = StyleSheet.create({
     ...CARD_SHADOW,
   },
 
-  // ── Controls ─────────────────────────────────────────────────────
+  // ── Controls ───────────────────────────────────────────────────────────────
   controls: {
     flexDirection: "row",
     alignItems: "center",
@@ -416,7 +533,7 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "135deg" }],
   },
 
-  // ── Feedback ─────────────────────────────────────────────────────
+  // ── Feedback ───────────────────────────────────────────────────────────────
   feedback: {
     flexDirection: "row",
     alignItems: "center",
