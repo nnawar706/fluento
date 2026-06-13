@@ -1,12 +1,10 @@
-import { createClerkClient } from "@clerk/backend";
+import { verifyToken } from "@clerk/backend";
 import { StreamClient } from "@stream-io/node-sdk";
 
-// Server-side only — secrets never reach the React Native bundle
-const clerkClient = createClerkClient({
-  secretKey: process.env.CLERK_SECRET_KEY!,
-});
-
 export async function POST(request: Request) {
+  // Read body first — request body can only be read once
+  const body = await request.json().catch(() => ({})) as { userName?: string };
+
   const authHeader = request.headers.get("Authorization");
 
   if (!authHeader?.startsWith("Bearer ")) {
@@ -17,11 +15,15 @@ export async function POST(request: Request) {
 
   let userId: string;
   try {
-    // Verify the Clerk session JWT and derive the user ID server-side.
-    // Never accept a client-supplied user_id — this is the security boundary.
-    const payload = await clerkClient.verifyToken(sessionToken);
+    // verifyToken fetches the JWKS via publishableKey (public endpoint, no secret needed).
+    // The user ID is derived from the verified payload — never from a client param.
+    const payload = await verifyToken(sessionToken, {
+      publishableKey: process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!,
+      secretKey: process.env.CLERK_SECRET_KEY ?? "",
+    });
     userId = payload.sub;
-  } catch {
+  } catch (err) {
+    console.error("[stream-token] Clerk verification failed:", err);
     return Response.json({ error: "Invalid session" }, { status: 401 });
   }
 
@@ -41,9 +43,6 @@ export async function POST(request: Request) {
     user_id: userId,
     validity_in_seconds: 60 * 60 * 4, // 4-hour token; SDK refreshes via tokenProvider
   });
-
-  // Accept display name from the client — it is not security-sensitive
-  const body = await request.json().catch(() => ({})) as { userName?: string };
 
   return Response.json({
     token,

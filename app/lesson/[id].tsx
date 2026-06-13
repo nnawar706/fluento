@@ -2,10 +2,13 @@ import { images } from "@/constants/images";
 import { colors, fontFamily } from "@/constants/theme";
 import { getLessonById } from "@/data/lessons";
 import { useStreamCall } from "@/hooks/useStreamCall";
+import type { AgentStatus } from "@/hooks/useStreamCall";
+import type { AgentLessonContext } from "@/lib/stream";
+import { useLanguageStore } from "@/store/languageStore";
 import { useAuth, useUser } from "@clerk/expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -26,6 +29,14 @@ const STATUS_CONFIG = {
   ended: { color: "#9ca3af", label: "Session ended" },
 } as const;
 
+// ── Agent status config ────────────────────────────────────────────────────────
+const AGENT_CONFIG: Record<AgentStatus, { color: string; label: string }> = {
+  idle: { color: "#9ca3af", label: "AI Teacher: waiting" },
+  connecting: { color: "#f59e0b", label: "AI Teacher: joining..." },
+  connected: { color: colors.linguaGreen, label: "AI Teacher: live" },
+  failed: { color: colors.error, label: "AI Teacher: unavailable" },
+};
+
 export default function AudioLessonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -33,6 +44,7 @@ export default function AudioLessonScreen() {
 
   const { user, isLoaded: userLoaded } = useUser();
   const { getToken } = useAuth();
+  const { selectedLanguage } = useLanguageStore();
 
   // ── Session timer (only ticks while joined) ──────────────────────────────────
   const [sessionSeconds, setSessionSeconds] = useState(0);
@@ -46,12 +58,36 @@ export default function AudioLessonScreen() {
     ? `lesson-${lesson.id.replace(/[^a-z0-9-]/g, "-")}-${user?.id ?? "anon"}`
     : "lesson-default";
 
-  const { callState, errorMessage, isMuted, startCall, toggleMute, endCall } =
+  // Build the lesson context the Vision Agent needs — memoised so it's stable
+  const lessonContext = useMemo((): AgentLessonContext | null => {
+    if (!lesson) return null;
+    return {
+      callId,
+      callType: "default",
+      language: selectedLanguage?.name ?? lesson.languageCode,
+      lessonTitle: lesson.title,
+      goals: lesson.goals.map((g) => g.description),
+      vocabulary: lesson.vocabulary.map((v) => ({
+        word: v.word,
+        translation: v.translation,
+        pronunciation: v.pronunciation,
+      })),
+      phrases: lesson.phrases.map((p) => ({
+        phrase: p.phrase,
+        translation: p.translation,
+        pronunciation: p.pronunciation,
+      })),
+      aiTeacherPrompt: lesson.aiTeacherPrompt,
+    };
+  }, [lesson, callId, selectedLanguage]);
+
+  const { callState, agentStatus, errorMessage, isMuted, startCall, toggleMute, endCall } =
     useStreamCall({
       callId,
       userName: user?.firstName ?? user?.username ?? "Student",
       userImage: user?.imageUrl,
       getClerkToken: () => getToken(),
+      lessonContext,
     });
 
   // Auto-start the call once user + lesson are ready
@@ -119,6 +155,30 @@ export default function AudioLessonScreen() {
               {callState === "joined" && isMuted ? "Muted" : status.label}
             </Text>
           </View>
+          {/* Agent status — shown whenever the agent is not idle */}
+          {agentStatus !== "idle" && (
+            <View style={styles.agentRow}>
+              {agentStatus === "connecting" ? (
+                <ActivityIndicator
+                  size={8}
+                  color={AGENT_CONFIG[agentStatus].color}
+                  style={styles.agentSpinner}
+                />
+              ) : (
+                <View
+                  style={[
+                    styles.agentDot,
+                    { backgroundColor: AGENT_CONFIG[agentStatus].color },
+                  ]}
+                />
+              )}
+              <Text
+                style={[styles.agentText, { color: AGENT_CONFIG[agentStatus].color }]}
+              >
+                {AGENT_CONFIG[agentStatus].label}
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.headerRight}>
@@ -126,17 +186,17 @@ export default function AudioLessonScreen() {
             <ActivityIndicator size="small" color={colors.primary} />
           ) : (
             <Ionicons
-              name="videocam-outline"
+              name="call-outline"
               size={20}
               color={colors.inkMuted}
             />
           )}
           <Text style={styles.sessionTime}>{sessionMinutes} min</Text>
-          <Ionicons
+          {/* <Ionicons
             name="notifications-outline"
             size={20}
             color={colors.inkMuted}
-          />
+          /> */}
         </View>
       </View>
 
@@ -215,7 +275,7 @@ export default function AudioLessonScreen() {
           disabled
         >
           <Ionicons
-            name="videocam-outline"
+            name="videocam-off-outline"
             size={22}
             color={colors.inkMuted}
           />
@@ -562,5 +622,26 @@ const styles = StyleSheet.create({
     width: 1,
     height: 28,
     backgroundColor: colors.border,
+  },
+
+  // ── Agent status row ───────────────────────────────────────────────────────
+  agentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 3,
+  },
+  agentDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  agentSpinner: {
+    width: 6,
+    height: 6,
+  },
+  agentText: {
+    fontFamily: fontFamily.regular,
+    fontSize: 10,
   },
 });

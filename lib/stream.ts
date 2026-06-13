@@ -7,6 +7,24 @@ export interface StreamTokenResponse {
   userName: string;
 }
 
+export type AgentStatus = "idle" | "connecting" | "connected" | "failed";
+
+export interface AgentLessonContext {
+  callId: string;
+  callType: string;
+  language: string;
+  lessonTitle: string;
+  goals: string[];
+  vocabulary: Array<{ word: string; translation: string; pronunciation: string }>;
+  phrases: Array<{ phrase: string; translation: string; pronunciation: string }>;
+  aiTeacherPrompt: {
+    topic: string;
+    systemPrompt: string;
+    teachingPoints: string[];
+    exampleDialogue?: string;
+  };
+}
+
 /**
  * Resolves the base URL for Expo API routes.
  * In dev, uses the Expo bundler host. In prod, uses EXPO_PUBLIC_API_URL.
@@ -60,4 +78,57 @@ export async function fetchStreamToken(
   }
 
   return res.json() as Promise<StreamTokenResponse>;
+}
+
+/**
+ * Asks the Expo API route to start the Vision Agent for a call.
+ * Packs lesson context into the Stream call's custom data so the agent
+ * can read it on join.
+ */
+export async function startAgent(
+  clerkSessionToken: string,
+  context: AgentLessonContext
+): Promise<{ sessionId: string }> {
+  const baseUrl = getApiBaseUrl();
+
+  const res = await fetch(`${baseUrl}/api/agent-start`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${clerkSessionToken}`,
+    },
+    body: JSON.stringify(context),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "Unknown error" })) as { error?: string };
+    throw new Error(body.error ?? `HTTP ${res.status}`);
+  }
+
+  return res.json() as Promise<{ sessionId: string }>;
+}
+
+/**
+ * Stops a running Vision Agent session.
+ * Non-throwing: errors are logged but not surfaced so cleanup always completes.
+ */
+export async function stopAgent(
+  clerkSessionToken: string,
+  callId: string,
+  sessionId: string
+): Promise<void> {
+  const baseUrl = getApiBaseUrl();
+
+  try {
+    await fetch(`${baseUrl}/api/agent-stop`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${clerkSessionToken}`,
+      },
+      body: JSON.stringify({ callId, sessionId }),
+    });
+  } catch (err) {
+    console.warn("[stopAgent]", err);
+  }
 }
