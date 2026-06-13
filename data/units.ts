@@ -8,7 +8,14 @@ export const units: Unit[] = [
     title: 'Greetings & Basics',
     description: 'Learn to say hello, goodbye, and introduce yourself in Bengali.',
     order: 1,
-    lessonIds: ['lesson-bn-1-1', 'lesson-bn-1-2'],
+    lessonIds: [
+      'lesson-bn-1-1',
+      'lesson-bn-1-2',
+      'lesson-bn-1-3',
+      'lesson-bn-1-4',
+      'lesson-bn-1-5',
+      'lesson-bn-1-6',
+    ],
   },
 
   // ─── Spanish ─────────────────────────────────────────────────────────────
@@ -18,7 +25,14 @@ export const units: Unit[] = [
     title: 'Saludos y Básicos',
     description: 'Learn to greet people and introduce yourself in Spanish.',
     order: 1,
-    lessonIds: ['lesson-es-1-1', 'lesson-es-1-2'],
+    lessonIds: [
+      'lesson-es-1-1',
+      'lesson-es-1-2',
+      'lesson-es-1-3',
+      'lesson-es-1-4',
+      'lesson-es-1-5',
+      'lesson-es-1-6',
+    ],
   },
 
   // ─── French ──────────────────────────────────────────────────────────────
@@ -28,7 +42,14 @@ export const units: Unit[] = [
     title: 'Salutations & Bases',
     description: 'Learn to greet people and introduce yourself in French.',
     order: 1,
-    lessonIds: ['lesson-fr-1-1', 'lesson-fr-1-2'],
+    lessonIds: [
+      'lesson-fr-1-1',
+      'lesson-fr-1-2',
+      'lesson-fr-1-3',
+      'lesson-fr-1-4',
+      'lesson-fr-1-5',
+      'lesson-fr-1-6',
+    ],
   },
 
   // ─── Japanese ────────────────────────────────────────────────────────────
@@ -38,7 +59,14 @@ export const units: Unit[] = [
     title: 'あいさつ（Greetings）',
     description: 'Learn essential Japanese greetings and polite expressions.',
     order: 1,
-    lessonIds: ['lesson-ja-1-1', 'lesson-ja-1-2'],
+    lessonIds: [
+      'lesson-ja-1-1',
+      'lesson-ja-1-2',
+      'lesson-ja-1-3',
+      'lesson-ja-1-4',
+      'lesson-ja-1-5',
+      'lesson-ja-1-6',
+    ],
   },
 ];
 

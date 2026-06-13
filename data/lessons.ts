@@ -857,6 +857,578 @@ export const lessons: Lesson[] = [
   },
 ];
 
+// ═══════════════════════════════════════════════════════════════════════════
+// SPANISH — additional lessons
+// ═══════════════════════════════════════════════════════════════════════════
+
+lessons.push(
+  {
+    id: 'lesson-es-1-3',
+    unitId: 'unit-es-1',
+    languageCode: 'es',
+    title: 'Numbers 1–10',
+    description: 'Count from one to ten and use numbers in everyday sentences.',
+    xpReward: 10,
+    goals: [
+      { description: 'Count from 1 to 10 in Spanish' },
+      { description: 'Use numbers in simple sentences' },
+    ],
+    vocabulary: [
+      { word: 'uno', translation: 'one', pronunciation: 'OO-no' },
+      { word: 'dos', translation: 'two', pronunciation: 'dohs' },
+      { word: 'tres', translation: 'three', pronunciation: 'trehs' },
+      { word: 'cuatro', translation: 'four', pronunciation: 'KWAH-tro' },
+      { word: 'cinco', translation: 'five', pronunciation: 'SEEN-ko' },
+      { word: 'diez', translation: 'ten', pronunciation: 'dyehs' },
+    ],
+    phrases: [
+      { phrase: '¿Cuántos años tienes?', translation: 'How old are you?', pronunciation: 'KWAN-tos AH-nyos TYEH-nes' },
+      { phrase: 'Tengo ___ años.', translation: 'I am ___ years old.', pronunciation: 'TEN-go ___ AH-nyos' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "cinco" mean?', options: ['three', 'four', 'five', 'six'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'uno', right: 'one' }, { left: 'dos', right: 'two' }, { left: 'tres', right: 'three' }, { left: 'diez', right: 'ten' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Spanish Numbers 1–10',
+      systemPrompt: 'You are a fun Spanish teacher teaching numbers 1 to 10. Use counting exercises and simple games to make it engaging. Be encouraging and playful.',
+      teachingPoints: ['uno=1, dos=2, tres=3, cuatro=4, cinco=5', 'seis=6, siete=7, ocho=8, nueve=9, diez=10'],
+      exampleDialogue: 'Teacher: ¿Cuántos dedos tienes? (How many fingers?)\nStudent: ¡Diez! (Ten!)',
+    },
+  },
+  {
+    id: 'lesson-es-1-4',
+    unitId: 'unit-es-1',
+    languageCode: 'es',
+    title: 'Colors',
+    description: 'Learn the most common colors in Spanish.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name basic colors in Spanish' },
+      { description: 'Describe objects by color' },
+    ],
+    vocabulary: [
+      { word: 'rojo', translation: 'red', pronunciation: 'ROH-ho' },
+      { word: 'azul', translation: 'blue', pronunciation: 'ah-SOOL' },
+      { word: 'verde', translation: 'green', pronunciation: 'VER-deh' },
+      { word: 'amarillo', translation: 'yellow', pronunciation: 'ah-mah-REE-yo' },
+      { word: 'negro', translation: 'black', pronunciation: 'NEH-gro' },
+      { word: 'blanco', translation: 'white', pronunciation: 'BLAN-ko' },
+    ],
+    phrases: [
+      { phrase: '¿De qué color es?', translation: 'What color is it?', pronunciation: 'deh keh koh-LOR ehs' },
+      { phrase: 'Es de color rojo.', translation: 'It is red.', pronunciation: 'ehs deh koh-LOR ROH-ho' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "azul" mean?', options: ['red', 'blue', 'green', 'yellow'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'rojo', right: 'red' }, { left: 'azul', right: 'blue' }, { left: 'verde', right: 'green' }, { left: 'amarillo', right: 'yellow' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Spanish Colors',
+      systemPrompt: 'You are a creative Spanish teacher teaching colors. Use everyday objects to illustrate each color. Make it visual and memorable.',
+      teachingPoints: ['rojo=red, azul=blue, verde=green', 'amarillo=yellow, negro=black, blanco=white'],
+      exampleDialogue: 'Teacher: ¿De qué color es el cielo? (What color is the sky?)\nStudent: ¡Azul! (Blue!)',
+    },
+  },
+  {
+    id: 'lesson-es-1-5',
+    unitId: 'unit-es-1',
+    languageCode: 'es',
+    title: 'Family & Friends',
+    description: 'Talk about your family members in Spanish.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name family members in Spanish' },
+      { description: 'Describe your family in simple sentences' },
+    ],
+    vocabulary: [
+      { word: 'madre', translation: 'mother', pronunciation: 'MAH-dreh', example: 'Mi madre se llama Ana.', exampleTranslation: 'My mother\'s name is Ana.' },
+      { word: 'padre', translation: 'father', pronunciation: 'PAH-dreh' },
+      { word: 'hermano', translation: 'brother', pronunciation: 'ehr-MAH-no' },
+      { word: 'hermana', translation: 'sister', pronunciation: 'ehr-MAH-na' },
+      { word: 'abuelo', translation: 'grandfather', pronunciation: 'ah-BWEH-lo' },
+      { word: 'abuela', translation: 'grandmother', pronunciation: 'ah-BWEH-la' },
+    ],
+    phrases: [
+      { phrase: 'Esta es mi familia.', translation: 'This is my family.', pronunciation: 'EH-stah ehs mee fah-MEE-lyah' },
+      { phrase: '¿Tienes hermanos?', translation: 'Do you have siblings?', pronunciation: 'TYEH-nes ehr-MAH-nos' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "padre" mean?', options: ['mother', 'sister', 'father', 'brother'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'madre', right: 'mother' }, { left: 'padre', right: 'father' }, { left: 'hermano', right: 'brother' }, { left: 'abuela', right: 'grandmother' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Spanish Family Members',
+      systemPrompt: 'You are a warm Spanish teacher helping students describe their family. Teach "mi" (my) with each family member word and practice through conversation.',
+      teachingPoints: ['madre/mamá = mother, padre/papá = father', 'hermano = brother, hermana = sister', 'abuelo = grandfather, abuela = grandmother'],
+      exampleDialogue: 'Teacher: ¿Tienes hermanos?\nStudent: Sí, tengo un hermano. (Yes, I have a brother.)',
+    },
+  },
+  {
+    id: 'lesson-es-1-6',
+    unitId: 'unit-es-1',
+    languageCode: 'es',
+    title: 'At the Restaurant',
+    description: 'Order food and ask for the bill in Spanish.',
+    xpReward: 10,
+    goals: [
+      { description: 'Order food and drinks in a restaurant' },
+      { description: 'Ask for the check politely' },
+    ],
+    vocabulary: [
+      { word: 'el menú', translation: 'the menu', pronunciation: 'el meh-NOO' },
+      { word: 'una mesa', translation: 'a table', pronunciation: 'OO-nah MEH-sah' },
+      { word: 'el camarero', translation: 'the waiter', pronunciation: 'el kah-mah-REH-ro' },
+      { word: 'el agua', translation: 'water', pronunciation: 'el AH-gwah' },
+      { word: 'la comida', translation: 'the food', pronunciation: 'lah koh-MEE-dah' },
+      { word: 'la cuenta', translation: 'the bill', pronunciation: 'lah KWEN-tah' },
+    ],
+    phrases: [
+      { phrase: 'Una mesa para dos, por favor.', translation: 'A table for two, please.', pronunciation: 'OO-nah MEH-sah PAH-rah dohs, por fah-VOR' },
+      { phrase: 'La cuenta, por favor.', translation: 'The bill, please.', pronunciation: 'lah KWEN-tah, por fah-VOR' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'How do you ask for the bill?', options: ['El menú, por favor.', 'Una mesa, por favor.', 'La cuenta, por favor.', 'El agua, por favor.'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'el menú', right: 'the menu' }, { left: 'el agua', right: 'water' }, { left: 'la cuenta', right: 'the bill' }, { left: 'la comida', right: 'the food' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Spanish Restaurant Vocabulary',
+      systemPrompt: 'You are a helpful Spanish teacher role-playing a restaurant visit. Teach ordering phrases and how to ask for the bill. Practice through a fun simulated restaurant scene.',
+      teachingPoints: ['Una mesa para dos = A table for two', 'La cuenta = the bill', 'El camarero = waiter'],
+      exampleDialogue: 'Teacher (waiter): ¿Qué desea?\nStudent: Una mesa para dos, por favor.\nTeacher: ¡Por supuesto!',
+    },
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FRENCH — additional lessons
+// ═══════════════════════════════════════════════════════════════════════════
+
+lessons.push(
+  {
+    id: 'lesson-fr-1-3',
+    unitId: 'unit-fr-1',
+    languageCode: 'fr',
+    title: 'Numbers 1–10',
+    description: 'Count from one to ten in French.',
+    xpReward: 10,
+    goals: [
+      { description: 'Count from 1 to 10 in French' },
+      { description: 'Use numbers in simple everyday sentences' },
+    ],
+    vocabulary: [
+      { word: 'un / une', translation: 'one', pronunciation: 'uhn / oon' },
+      { word: 'deux', translation: 'two', pronunciation: 'duh' },
+      { word: 'trois', translation: 'three', pronunciation: 'twah' },
+      { word: 'quatre', translation: 'four', pronunciation: 'KAH-truh' },
+      { word: 'cinq', translation: 'five', pronunciation: 'sank' },
+      { word: 'dix', translation: 'ten', pronunciation: 'dees' },
+    ],
+    phrases: [
+      { phrase: 'Quel âge as-tu?', translation: 'How old are you?', pronunciation: 'kel ahzh ah-TOO' },
+      { phrase: 'J\'ai ___ ans.', translation: 'I am ___ years old.', pronunciation: 'zhay ___ ahn' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "cinq" mean?', options: ['three', 'four', 'five', 'six'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'un', right: 'one' }, { left: 'deux', right: 'two' }, { left: 'trois', right: 'three' }, { left: 'dix', right: 'ten' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'French Numbers 1–10',
+      systemPrompt: 'You are an encouraging French teacher teaching numbers. Use counting games and fun examples to make numbers memorable.',
+      teachingPoints: ['un=1, deux=2, trois=3, quatre=4, cinq=5', 'six=6, sept=7, huit=8, neuf=9, dix=10'],
+      exampleDialogue: 'Teacher: Comptons ensemble! Un, deux, trois...\nStudent: Quatre, cinq!',
+    },
+  },
+  {
+    id: 'lesson-fr-1-4',
+    unitId: 'unit-fr-1',
+    languageCode: 'fr',
+    title: 'Colors',
+    description: 'Discover the most common colors in French.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name basic colors in French' },
+      { description: 'Describe objects by their color' },
+    ],
+    vocabulary: [
+      { word: 'rouge', translation: 'red', pronunciation: 'roozh' },
+      { word: 'bleu', translation: 'blue', pronunciation: 'bluh' },
+      { word: 'vert', translation: 'green', pronunciation: 'vehr' },
+      { word: 'jaune', translation: 'yellow', pronunciation: 'zhohn' },
+      { word: 'noir', translation: 'black', pronunciation: 'nwahr' },
+      { word: 'blanc', translation: 'white', pronunciation: 'blahn' },
+    ],
+    phrases: [
+      { phrase: 'De quelle couleur est-ce?', translation: 'What color is this?', pronunciation: 'duh kel koo-LUR ehs' },
+      { phrase: 'C\'est rouge.', translation: 'It is red.', pronunciation: 'say roozh' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "bleu" mean?', options: ['red', 'blue', 'green', 'yellow'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'rouge', right: 'red' }, { left: 'bleu', right: 'blue' }, { left: 'vert', right: 'green' }, { left: 'jaune', right: 'yellow' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'French Colors',
+      systemPrompt: 'You are a creative French teacher teaching colors. Use everyday objects and visual descriptions to make each color memorable.',
+      teachingPoints: ['rouge=red, bleu=blue, vert=green', 'jaune=yellow, noir=black, blanc=white'],
+      exampleDialogue: 'Teacher: De quelle couleur est le ciel?\nStudent: Bleu!',
+    },
+  },
+  {
+    id: 'lesson-fr-1-5',
+    unitId: 'unit-fr-1',
+    languageCode: 'fr',
+    title: 'Family & Friends',
+    description: 'Talk about your family in French.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name family members in French' },
+      { description: 'Introduce your family members' },
+    ],
+    vocabulary: [
+      { word: 'la mère', translation: 'mother', pronunciation: 'lah mehr', example: 'Ma mère s\'appelle Sophie.', exampleTranslation: 'My mother\'s name is Sophie.' },
+      { word: 'le père', translation: 'father', pronunciation: 'luh pehr' },
+      { word: 'le frère', translation: 'brother', pronunciation: 'luh frehr' },
+      { word: 'la sœur', translation: 'sister', pronunciation: 'lah sur' },
+      { word: 'le grand-père', translation: 'grandfather', pronunciation: 'luh grahn-pehr' },
+      { word: 'la grand-mère', translation: 'grandmother', pronunciation: 'lah grahn-mehr' },
+    ],
+    phrases: [
+      { phrase: 'Voici ma famille.', translation: 'Here is my family.', pronunciation: 'vwah-SEE mah fah-MEE' },
+      { phrase: 'As-tu des frères et sœurs?', translation: 'Do you have siblings?', pronunciation: 'ah-TOO deh frehr ay sur' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "le père" mean?', options: ['mother', 'sister', 'father', 'brother'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'la mère', right: 'mother' }, { left: 'le père', right: 'father' }, { left: 'le frère', right: 'brother' }, { left: 'la sœur', right: 'sister' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'French Family Members',
+      systemPrompt: 'You are a warm French teacher teaching family vocabulary. Practice using "ma" and "mon" (my) with each word. Encourage students to talk about their own families.',
+      teachingPoints: ['la mère = mother, le père = father', 'le frère = brother, la sœur = sister', 'la famille = the family'],
+      exampleDialogue: 'Teacher: As-tu des frères et sœurs?\nStudent: Oui, j\'ai une sœur. (Yes, I have a sister.)',
+    },
+  },
+  {
+    id: 'lesson-fr-1-6',
+    unitId: 'unit-fr-1',
+    languageCode: 'fr',
+    title: 'At the Café',
+    description: 'Order drinks and snacks at a French café.',
+    xpReward: 10,
+    goals: [
+      { description: 'Order food and drinks at a café in French' },
+      { description: 'Use polite café expressions' },
+    ],
+    vocabulary: [
+      { word: 'un café', translation: 'a coffee', pronunciation: 'uhn kah-FAY' },
+      { word: 'un thé', translation: 'a tea', pronunciation: 'uhn tay' },
+      { word: 'un croissant', translation: 'a croissant', pronunciation: 'uhn kwah-SAHN' },
+      { word: 'l\'addition', translation: 'the bill', pronunciation: 'lah-dee-SYOHN' },
+      { word: 'une table', translation: 'a table', pronunciation: 'oon TAH-bluh' },
+      { word: 'le serveur', translation: 'the waiter', pronunciation: 'luh sehr-VUR' },
+    ],
+    phrases: [
+      { phrase: 'Un café, s\'il vous plaît.', translation: 'A coffee, please.', pronunciation: 'uhn kah-FAY, seel voo PLEH' },
+      { phrase: 'L\'addition, s\'il vous plaît.', translation: 'The bill, please.', pronunciation: 'lah-dee-SYOHN, seel voo PLEH' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'How do you order "a coffee" in French?', options: ['Un thé, s\'il vous plaît.', 'Un café, s\'il vous plaît.', 'Un croissant, s\'il vous plaît.', 'L\'addition, s\'il vous plaît.'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'un café', right: 'a coffee' }, { left: 'un thé', right: 'a tea' }, { left: 'l\'addition', right: 'the bill' }, { left: 'une table', right: 'a table' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'French Café Experience',
+      systemPrompt: 'You are a charming French teacher simulating a Parisian café visit. Teach ordering phrases and café vocabulary with cultural flair. Role-play as the waiter.',
+      teachingPoints: ['Un café = a coffee, un thé = a tea', 'L\'addition = the bill, une table = a table', 'S\'il vous plaît = please (always add this!)'],
+      exampleDialogue: 'Teacher (waiter): Bonjour! Que désirez-vous?\nStudent: Un café, s\'il vous plaît.\nTeacher: Bien sûr!',
+    },
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// JAPANESE — additional lessons
+// ═══════════════════════════════════════════════════════════════════════════
+
+lessons.push(
+  {
+    id: 'lesson-ja-1-3',
+    unitId: 'unit-ja-1',
+    languageCode: 'ja',
+    title: 'Numbers 1–10',
+    description: 'Count from one to ten in Japanese.',
+    xpReward: 10,
+    goals: [
+      { description: 'Count from 1 to 10 in Japanese' },
+      { description: 'Use numbers in simple sentences' },
+    ],
+    vocabulary: [
+      { word: 'いち', translation: 'one', pronunciation: 'ichi' },
+      { word: 'に', translation: 'two', pronunciation: 'ni' },
+      { word: 'さん', translation: 'three', pronunciation: 'san' },
+      { word: 'し / よん', translation: 'four', pronunciation: 'shi / yon' },
+      { word: 'ご', translation: 'five', pronunciation: 'go' },
+      { word: 'じゅう', translation: 'ten', pronunciation: 'juu' },
+    ],
+    phrases: [
+      { phrase: 'なんさいですか？', translation: 'How old are you?', pronunciation: 'Nansai desu ka?' },
+      { phrase: '___ さいです。', translation: 'I am ___ years old.', pronunciation: '___ sai desu.' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "さん" mean?', options: ['one', 'two', 'three', 'four'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'いち', right: 'one' }, { left: 'に', right: 'two' }, { left: 'さん', right: 'three' }, { left: 'じゅう', right: 'ten' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Japanese Numbers 1–10',
+      systemPrompt: 'You are a patient Japanese teacher teaching numbers. Use romaji alongside hiragana. Make counting fun with counting games.',
+      teachingPoints: ['いち=1, に=2, さん=3, し/よん=4, ご=5', 'ろく=6, なな=7, はち=8, きゅう=9, じゅう=10'],
+      exampleDialogue: 'Teacher: いち、に、さん... (one, two, three...)\nStudent: し、ご！(four, five!)',
+    },
+  },
+  {
+    id: 'lesson-ja-1-4',
+    unitId: 'unit-ja-1',
+    languageCode: 'ja',
+    title: 'Colors',
+    description: 'Learn the basic colors in Japanese.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name basic colors in Japanese' },
+      { description: 'Describe objects by color' },
+    ],
+    vocabulary: [
+      { word: 'あか', translation: 'red', pronunciation: 'aka' },
+      { word: 'あお', translation: 'blue', pronunciation: 'ao' },
+      { word: 'みどり', translation: 'green', pronunciation: 'midori' },
+      { word: 'きいろ', translation: 'yellow', pronunciation: 'kiiro' },
+      { word: 'くろ', translation: 'black', pronunciation: 'kuro' },
+      { word: 'しろ', translation: 'white', pronunciation: 'shiro' },
+    ],
+    phrases: [
+      { phrase: 'なにいろですか？', translation: 'What color is it?', pronunciation: 'Nani iro desu ka?' },
+      { phrase: 'あかです。', translation: 'It is red.', pronunciation: 'Aka desu.' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "あお" mean?', options: ['red', 'blue', 'green', 'yellow'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'あか', right: 'red' }, { left: 'あお', right: 'blue' }, { left: 'みどり', right: 'green' }, { left: 'きいろ', right: 'yellow' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Japanese Colors',
+      systemPrompt: 'You are a calm Japanese teacher teaching colors. Use everyday objects and illustrations to make each color memorable. Include romaji with hiragana.',
+      teachingPoints: ['あか=red, あお=blue, みどり=green', 'きいろ=yellow, くろ=black, しろ=white'],
+      exampleDialogue: 'Teacher: このりんごはなにいろ？(What color is this apple?)\nStudent: あかです！(Red!)',
+    },
+  },
+  {
+    id: 'lesson-ja-1-5',
+    unitId: 'unit-ja-1',
+    languageCode: 'ja',
+    title: 'Family Members',
+    description: 'Learn to talk about your family in Japanese.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name family members in Japanese' },
+      { description: 'Introduce your family politely' },
+    ],
+    vocabulary: [
+      { word: 'おかあさん', translation: 'mother', pronunciation: 'okaasan', example: 'わたしのおかあさんです。', exampleTranslation: 'This is my mother.' },
+      { word: 'おとうさん', translation: 'father', pronunciation: 'otousan' },
+      { word: 'おにいさん', translation: 'older brother', pronunciation: 'oniisan' },
+      { word: 'おねえさん', translation: 'older sister', pronunciation: 'oneesan' },
+      { word: 'おじいさん', translation: 'grandfather', pronunciation: 'ojiisan' },
+      { word: 'おばあさん', translation: 'grandmother', pronunciation: 'obaasan' },
+    ],
+    phrases: [
+      { phrase: 'かぞくをしょうかいします。', translation: 'Let me introduce my family.', pronunciation: 'Kazoku wo shoukai shimasu.' },
+      { phrase: 'きょうだいはいますか？', translation: 'Do you have siblings?', pronunciation: 'Kyoudai wa imasu ka?' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "おとうさん" mean?', options: ['mother', 'sister', 'grandfather', 'father'], correctIndex: 3 },
+      { type: 'match_pairs', pairs: [{ left: 'おかあさん', right: 'mother' }, { left: 'おとうさん', right: 'father' }, { left: 'おにいさん', right: 'older brother' }, { left: 'おばあさん', right: 'grandmother' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Japanese Family Members',
+      systemPrompt: 'You are a kind Japanese teacher helping students learn family vocabulary. Explain the honorific forms used when talking about other people\'s families versus your own.',
+      teachingPoints: ['おかあさん=mother, おとうさん=father (used for others)', 'おにいさん=older brother, おねえさん=older sister', 'In Japanese, different words are used for your own family vs. others\''],
+      exampleDialogue: 'Teacher: きょうだいはいますか？\nStudent: はい、おにいさんがひとりいます。(Yes, I have one older brother.)',
+    },
+  },
+  {
+    id: 'lesson-ja-1-6',
+    unitId: 'unit-ja-1',
+    languageCode: 'ja',
+    title: 'At the Restaurant',
+    description: 'Order food and navigate a Japanese restaurant.',
+    xpReward: 10,
+    goals: [
+      { description: 'Order food and drinks in Japanese' },
+      { description: 'Use polite restaurant expressions' },
+    ],
+    vocabulary: [
+      { word: 'メニュー', translation: 'menu', pronunciation: 'menyuu' },
+      { word: 'おみず', translation: 'water', pronunciation: 'omizu' },
+      { word: 'てんいん', translation: 'staff / server', pronunciation: 'ten-in' },
+      { word: 'ちゅうもん', translation: 'order', pronunciation: 'chuumon' },
+      { word: 'おかいけい', translation: 'the bill', pronunciation: 'okaikei' },
+      { word: 'おいしい', translation: 'delicious', pronunciation: 'oishii' },
+    ],
+    phrases: [
+      { phrase: 'これをください。', translation: 'I\'ll have this, please.', pronunciation: 'Kore wo kudasai.' },
+      { phrase: 'おかいけいをおねがいします。', translation: 'The bill, please.', pronunciation: 'Okaikei wo onegaishimasu.' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'How do you say "delicious" in Japanese?', options: ['おみず', 'メニュー', 'おいしい', 'ちゅうもん'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'メニュー', right: 'menu' }, { left: 'おみず', right: 'water' }, { left: 'おかいけい', right: 'the bill' }, { left: 'おいしい', right: 'delicious' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Japanese Restaurant Experience',
+      systemPrompt: 'You are a helpful Japanese teacher simulating a restaurant visit. Teach ordering vocabulary and polite phrases. Practice role-playing ordering and paying.',
+      teachingPoints: ['これをください = I\'ll have this, please', 'おかいけいをおねがいします = The bill, please', 'おいしい = delicious — great to say after eating!'],
+      exampleDialogue: 'Teacher (waiter): ご注文は？(What would you like?)\nStudent: これをください。(I\'ll have this.)\nTeacher: かしこまりました！(Certainly!)',
+    },
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BENGALI — additional lessons
+// ═══════════════════════════════════════════════════════════════════════════
+
+lessons.push(
+  {
+    id: 'lesson-bn-1-3',
+    unitId: 'unit-bn-1',
+    languageCode: 'bn',
+    title: 'Numbers 1–10',
+    description: 'Count from one to ten in Bengali.',
+    xpReward: 10,
+    goals: [
+      { description: 'Count from 1 to 10 in Bengali' },
+      { description: 'Use numbers in everyday sentences' },
+    ],
+    vocabulary: [
+      { word: 'এক', translation: 'one', pronunciation: 'Ek' },
+      { word: 'দুই', translation: 'two', pronunciation: 'Dui' },
+      { word: 'তিন', translation: 'three', pronunciation: 'Tin' },
+      { word: 'চার', translation: 'four', pronunciation: 'Char' },
+      { word: 'পাঁচ', translation: 'five', pronunciation: 'Panch' },
+      { word: 'দশ', translation: 'ten', pronunciation: 'Dash' },
+    ],
+    phrases: [
+      { phrase: 'আপনার বয়স কত?', translation: 'How old are you?', pronunciation: 'Apnar boyos koto?' },
+      { phrase: 'আমার বয়স ___ বছর।', translation: 'I am ___ years old.', pronunciation: 'Amar boyos ___ bochor.' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "পাঁচ" mean?', options: ['three', 'four', 'five', 'six'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'এক', right: 'one' }, { left: 'দুই', right: 'two' }, { left: 'তিন', right: 'three' }, { left: 'দশ', right: 'ten' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Bengali Numbers 1–10',
+      systemPrompt: 'You are an enthusiastic Bengali teacher teaching numbers 1 to 10. Use counting games and examples to make numbers stick. Be patient and encouraging.',
+      teachingPoints: ['এক=1, দুই=2, তিন=3, চার=4, পাঁচ=5', 'ছয়=6, সাত=7, আট=8, নয়=9, দশ=10'],
+      exampleDialogue: 'Teacher: এক, দুই, তিন... (one, two, three...)\nStudent: চার, পাঁচ! (four, five!)',
+    },
+  },
+  {
+    id: 'lesson-bn-1-4',
+    unitId: 'unit-bn-1',
+    languageCode: 'bn',
+    title: 'Colors',
+    description: 'Learn the basic colors in Bengali.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name basic colors in Bengali' },
+      { description: 'Describe objects using color words' },
+    ],
+    vocabulary: [
+      { word: 'লাল', translation: 'red', pronunciation: 'Lal' },
+      { word: 'নীল', translation: 'blue', pronunciation: 'Nil' },
+      { word: 'সবুজ', translation: 'green', pronunciation: 'Shobuj' },
+      { word: 'হলুদ', translation: 'yellow', pronunciation: 'Holud' },
+      { word: 'কালো', translation: 'black', pronunciation: 'Kalo' },
+      { word: 'সাদা', translation: 'white', pronunciation: 'Shada' },
+    ],
+    phrases: [
+      { phrase: 'এটা কি রঙ?', translation: 'What color is this?', pronunciation: 'Eta ki rong?' },
+      { phrase: 'এটা লাল।', translation: 'It is red.', pronunciation: 'Eta lal.' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "নীল" mean?', options: ['red', 'blue', 'green', 'yellow'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'লাল', right: 'red' }, { left: 'নীল', right: 'blue' }, { left: 'সবুজ', right: 'green' }, { left: 'হলুদ', right: 'yellow' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Bengali Colors',
+      systemPrompt: 'You are a creative Bengali teacher teaching colors through everyday objects. Make color names memorable by connecting them to familiar things like the sky, grass, and sunflowers.',
+      teachingPoints: ['লাল=red, নীল=blue, সবুজ=green', 'হলুদ=yellow, কালো=black, সাদা=white'],
+      exampleDialogue: 'Teacher: আকাশের রঙ কি? (What color is the sky?)\nStudent: নীল! (Blue!)',
+    },
+  },
+  {
+    id: 'lesson-bn-1-5',
+    unitId: 'unit-bn-1',
+    languageCode: 'bn',
+    title: 'Family Members',
+    description: 'Learn to talk about your family in Bengali.',
+    xpReward: 10,
+    goals: [
+      { description: 'Name family members in Bengali' },
+      { description: 'Introduce your family members' },
+    ],
+    vocabulary: [
+      { word: 'মা', translation: 'mother', pronunciation: 'Ma', example: 'আমার মা খুব ভালো।', exampleTranslation: 'My mother is very kind.' },
+      { word: 'বাবা', translation: 'father', pronunciation: 'Baba' },
+      { word: 'ভাই', translation: 'brother', pronunciation: 'Bhai' },
+      { word: 'বোন', translation: 'sister', pronunciation: 'Bon' },
+      { word: 'দাদা', translation: 'grandfather', pronunciation: 'Dada' },
+      { word: 'দাদি', translation: 'grandmother', pronunciation: 'Dadi' },
+    ],
+    phrases: [
+      { phrase: 'এটা আমার পরিবার।', translation: 'This is my family.', pronunciation: 'Eta amar poribar.' },
+      { phrase: 'আপনার কি ভাই বোন আছে?', translation: 'Do you have siblings?', pronunciation: 'Apnar ki bhai bon ache?' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "বাবা" mean?', options: ['mother', 'sister', 'father', 'brother'], correctIndex: 2 },
+      { type: 'match_pairs', pairs: [{ left: 'মা', right: 'mother' }, { left: 'বাবা', right: 'father' }, { left: 'ভাই', right: 'brother' }, { left: 'বোন', right: 'sister' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Bengali Family Members',
+      systemPrompt: 'You are a warm Bengali teacher teaching family vocabulary. Help students describe their own families using "আমার" (my) with each word.',
+      teachingPoints: ['মা = mother, বাবা = father', 'ভাই = brother, বোন = sister', 'দাদা = grandfather, দাদি = grandmother'],
+      exampleDialogue: 'Teacher: আপনার কি ভাই বোন আছে?\nStudent: হ্যাঁ, আমার একটি বোন আছে। (Yes, I have one sister.)',
+    },
+  },
+  {
+    id: 'lesson-bn-1-6',
+    unitId: 'unit-bn-1',
+    languageCode: 'bn',
+    title: 'Daily Routines',
+    description: 'Learn to talk about your everyday activities in Bengali.',
+    xpReward: 10,
+    goals: [
+      { description: 'Describe daily routines in Bengali' },
+      { description: 'Use common action verbs in simple sentences' },
+    ],
+    vocabulary: [
+      { word: 'ঘুমানো', translation: 'to sleep', pronunciation: 'Ghumano', example: 'আমি রাতে ঘুমাই।', exampleTranslation: 'I sleep at night.' },
+      { word: 'খাওয়া', translation: 'to eat', pronunciation: 'Khawa' },
+      { word: 'পড়া', translation: 'to read / study', pronunciation: 'Pora' },
+      { word: 'কাজ করা', translation: 'to work', pronunciation: 'Kaj kora' },
+      { word: 'হাঁটা', translation: 'to walk', pronunciation: 'Hata' },
+      { word: 'কথা বলা', translation: 'to speak', pronunciation: 'Kotha bola' },
+    ],
+    phrases: [
+      { phrase: 'আমি প্রতিদিন সকালে ওঠি।', translation: 'I wake up every morning.', pronunciation: 'Ami protidin shokale othi.' },
+      { phrase: 'আপনি কখন ঘুমান?', translation: 'When do you sleep?', pronunciation: 'Apni kokhon ghuman?' },
+    ],
+    activities: [
+      { type: 'multiple_choice', question: 'What does "খাওয়া" mean?', options: ['to sleep', 'to eat', 'to walk', 'to work'], correctIndex: 1 },
+      { type: 'match_pairs', pairs: [{ left: 'ঘুমানো', right: 'to sleep' }, { left: 'খাওয়া', right: 'to eat' }, { left: 'হাঁটা', right: 'to walk' }, { left: 'পড়া', right: 'to read' }] },
+    ],
+    aiTeacherPrompt: {
+      topic: 'Bengali Daily Routines',
+      systemPrompt: 'You are a helpful Bengali teacher teaching daily routine vocabulary. Walk through a typical day using Bengali action verbs. Encourage students to describe their own daily schedule.',
+      teachingPoints: ['ঘুমানো = to sleep, খাওয়া = to eat', 'পড়া = to read/study, কাজ করা = to work', 'হাঁটা = to walk, কথা বলা = to speak'],
+      exampleDialogue: 'Teacher: আপনি সকালে কি করেন? (What do you do in the morning?)\nStudent: আমি খাই এবং পড়ি। (I eat and study.)',
+    },
+  },
+);
+
 export function getLessonsByUnit(unitId: string): Lesson[] {
   return lessons.filter((l) => l.unitId === unitId);
 }
