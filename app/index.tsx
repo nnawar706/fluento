@@ -1,13 +1,15 @@
-import { useAuth, useClerk } from "@clerk/expo";
-import { Redirect, router } from "expo-router";
-import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
-import { colors, fontFamily } from "@/constants/theme";
+import { useAuth } from "@clerk/expo";
+import { Redirect } from "expo-router";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { colors } from "@/constants/theme";
+import { useLanguageStore } from "@/store/languageStore";
 
 export default function Index() {
   const { isSignedIn, isLoaded } = useAuth();
-  const { signOut } = useClerk();
+  const selectedLanguage = useLanguageStore((s) => s.selectedLanguage);
+  const hasHydrated = useLanguageStore((s) => s._hasHydrated);
 
-  if (!isLoaded) {
+  if (!isLoaded || !hasHydrated) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color={colors.primary} />
@@ -19,25 +21,11 @@ export default function Index() {
     return <Redirect href="/onboarding" />;
   }
 
-  return (
-    <View style={styles.center}>
-      <Text style={styles.title}>Fluento</Text>
-      <TouchableOpacity
-        style={styles.chooseLanguageBtn}
-        activeOpacity={0.85}
-        onPress={() => router.push("/language-selection")}
-      >
-        <Text style={styles.chooseLanguageText}>Choose a Language</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.signOutBtn}
-        activeOpacity={0.85}
-        onPress={() => signOut()}
-      >
-        <Text style={styles.signOutText}>Sign Out</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  if (!selectedLanguage) {
+    return <Redirect href="/language-selection" />;
+  }
+
+  return <Redirect href="/(tabs)" />;
 }
 
 const styles = StyleSheet.create({
@@ -46,34 +34,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.canvas,
-  },
-  title: {
-    fontFamily: fontFamily.bold,
-    fontSize: 32,
-    color: colors.primary,
-  },
-  chooseLanguageBtn: {
-    marginTop: 24,
-    backgroundColor: colors.primary,
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 14,
-  },
-  chooseLanguageText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 16,
-    color: colors.canvas,
-  },
-  signOutBtn: {
-    marginTop: 12,
-    backgroundColor: colors.surface,
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 14,
-  },
-  signOutText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 16,
-    color: colors.inkMuted,
   },
 });

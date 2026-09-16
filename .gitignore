@@ -3,7 +3,7 @@
 # dependencies
 node_modules/
 .vscode
-prompts/
+.env
 
 # Expo
 .expo/
@@ -43,3 +43,4 @@ app-example
 # generated native folders
 /ios
 /android
+.env
