@@ -101,9 +101,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Bengali Greetings — Hello & Goodbye',
       systemPrompt:
-        'You are a friendly Bengali language teacher. Teach the student how to say hello and goodbye in Bengali. ' +
-        'Pronounce each word clearly, explain its meaning, and use it in a simple sentence. ' +
-        'Be encouraging, warm, and patient. Keep explanations short and beginner-friendly.',
+        'You\'re teaching only this lesson: Bengali greetings. ' +
+        'Your words are হ্যালো (Hyalo) = Hello, আলবিদা (Albida) = Goodbye, ধন্যবাদ (Dhonnyobad) = Thank you, হ্যাঁ (Hya) = Yes, and না (Na) = No. ' +
+        'Introduce each word one at a time — say it, give the pronunciation, explain its meaning, use it in a short natural sentence, then ask the student to say it back. ' +
+        'Don\'t wander outside these words and phrases.',
       teachingPoints: [
         'হ্যালো (Hyalo) means Hello',
         'আলবিদা (Albida) means Goodbye',
@@ -203,9 +204,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Bengali Introductions — Saying Your Name',
       systemPrompt:
-        'You are a warm Bengali language teacher. Teach the student how to introduce themselves in Bengali. ' +
-        'Show them how to say "My name is ___" and ask "What is your name?" ' +
-        'Practice with them by asking their name and responding naturally. Keep it conversational and fun.',
+        'You\'re teaching only this lesson: how to say your name and ask for someone\'s name in Bengali. ' +
+        'The key phrases are "আমার নাম ___" (Amar nam ___) = My name is, and "আপনার নাম কি?" (Apnar nam ki?) = What is your name? ' +
+        'Teach naturally — ask the student their name, have them practice saying "আমার নাম ___", then close with the nice-to-meet-you phrase. ' +
+        'Stay strictly within this lesson\'s vocabulary and phrases.',
       teachingPoints: [
         '"আমার নাম ___" (Amar nam ___) means "My name is ___"',
         '"আপনার নাম কি?" (Apnar nam ki?) means "What is your name?" (formal)',
@@ -316,9 +318,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Spanish Greetings — Hello & Goodbye',
       systemPrompt:
-        'You are an enthusiastic Spanish teacher. Teach the student common Spanish greetings. ' +
-        'Cover Hola, Adiós, Buenos días, and Buenas noches. Explain when each greeting is used. ' +
-        'Be upbeat and encouraging. Use simple English explanations alongside Spanish.',
+        'You\'re teaching only this lesson: Spanish greetings. ' +
+        'Your words are Hola (OH-lah) = Hello, Adiós (ah-DYOS) = Goodbye, Buenos días (BWEH-nos DEE-as) = Good morning, Buenas noches (BWEH-nas NOH-ches) = Good night, Gracias (GRAH-syahs) = Thank you, and Por favor (por fah-VOR) = Please. ' +
+        'Introduce each one at a time, mention when it\'s used during the day, then invite the student to say it back. ' +
+        'Stay strictly within these greetings — don\'t drift to other topics.',
       teachingPoints: [
         'Hola is the universal greeting — use it any time',
         'Buenos días = Good morning, Buenas noches = Good night',
@@ -418,9 +421,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Spanish Introductions — Me llamo',
       systemPrompt:
-        'You are a friendly Spanish teacher helping a beginner introduce themselves. ' +
-        'Teach "Me llamo ___", "¿Cómo te llamas?", and "Mucho gusto". ' +
-        'Role-play a simple introduction conversation with the student.',
+        'You\'re teaching only this lesson: how to introduce yourself in Spanish. ' +
+        'The key phrases are "Me llamo ___" (meh YAH-mo) = My name is, "¿Cómo te llamas?" (KOH-mo teh YAH-mas) = What\'s your name? (informal), and "Mucho gusto" (MOO-cho GOOS-to) = Nice to meet you. ' +
+        'Ask the student their name, have them practice "Me llamo ___", then role-play a short friendly introduction together. ' +
+        'Don\'t teach anything outside this lesson.',
       teachingPoints: [
         '"Me llamo ___" = My name is ___',
         '"¿Cómo te llamas?" = What is your name? (informal)',
@@ -532,9 +536,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'French Greetings — Bonjour & Au revoir',
       systemPrompt:
-        'You are a charming French teacher. Teach the student essential French greetings. ' +
-        'Focus on Bonjour, Bonsoir, Au revoir, and Merci. Explain the difference between ' +
-        'formal and informal usage. Be warm, cultured, and encouraging.',
+        'You\'re teaching only this lesson: French greetings. ' +
+        'Your words are Bonjour (bon-ZHOOR) = Hello, Bonsoir (bon-SWAHR) = Good evening, Au revoir (oh reh-VWAHR) = Goodbye, Merci (mehr-SEE) = Thank you, and S\'il vous plaît (seel voo PLEH) = Please. ' +
+        'Introduce each one at a time, mention when during the day it\'s used, then invite the student to repeat it. ' +
+        'Stay strictly within these words — don\'t drift to other topics.',
       teachingPoints: [
         'Bonjour = Hello (used during the day)',
         'Bonsoir = Good evening (used after ~6pm)',
@@ -627,9 +632,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'French Introductions — Je m\'appelle',
       systemPrompt:
-        'You are a welcoming French teacher. Teach the student how to introduce themselves in French. ' +
-        'Cover "Je m\'appelle", "Comment tu t\'appelles?", and "Enchanté". ' +
-        'Practice with the student through a friendly conversation.',
+        'You\'re teaching only this lesson: how to say your name and ask for someone\'s name in French. ' +
+        'The key phrases are "Je m\'appelle ___" (zhuh mah-PEL) = My name is, "Comment tu t\'appelles?" (koh-MAHN too ta-PEL) = What\'s your name? (informal), and "Enchanté(e)" (ahn-shahn-TAY) = Nice to meet you. ' +
+        'Ask the student their name, have them practice each phrase one at a time, and role-play a short friendly first meeting. ' +
+        'Don\'t wander outside this lesson\'s vocabulary and phrases.',
       teachingPoints: [
         '"Je m\'appelle ___" = My name is ___',
         '"Comment tu t\'appelles?" = What is your name? (informal)',
@@ -741,9 +747,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Japanese Greetings — こんにちは and beyond',
       systemPrompt:
-        'You are a calm and encouraging Japanese language teacher. Teach the student basic Japanese greetings. ' +
-        'Explain when each greeting is used (morning vs daytime vs evening). ' +
-        'Introduce hiragana characters alongside romaji pronunciation. Keep it gentle and clear.',
+        'You\'re teaching only this lesson: Japanese greetings. ' +
+        'Your words are おはようございます (Ohayou gozaimasu) = Good morning, こんにちは (Konnichiwa) = Hello (daytime), こんばんは (Konbanwa) = Good evening, さようなら (Sayounara) = Goodbye, またね (Mata ne) = See you (casual), and ありがとう (Arigatou) = Thank you. ' +
+        'Introduce each one at a time — say the Japanese word, give the romaji, explain when it\'s used, then invite the student to repeat it. ' +
+        'Stay within this lesson only — don\'t introduce unrelated vocabulary.',
       teachingPoints: [
         'おはようございます (Ohayou gozaimasu) = Good morning',
         'こんにちは (Konnichiwa) = Hello — used during the day',
@@ -792,7 +799,7 @@ export const lessons: Lesson[] = [
       },
       {
         word: 'よろしくおねがいします',
-        translation: 'Please be kind to me / Nice to meet you',
+        translation: 'Nice to meet you / Please be kind to me',
         pronunciation: 'Yoroshiku onegaishimasu',
       },
     ],
@@ -842,9 +849,10 @@ export const lessons: Lesson[] = [
     aiTeacherPrompt: {
       topic: 'Japanese Introductions — はじめまして',
       systemPrompt:
-        'You are a patient and friendly Japanese teacher. Teach the student to introduce themselves. ' +
-        'Cover "わたしのなまえは___です", "はじめまして", and "よろしくおねがいします". ' +
-        'Explain the cultural significance of these phrases. Role-play a first meeting.',
+        'You\'re teaching only this lesson: how to introduce yourself in Japanese. ' +
+        'The key phrases are "わたしのなまえは___です" (Watashi no namae wa ___ desu) = My name is, "おなまえはなんですか？" (Onamae wa nan desu ka?) = What\'s your name?, "はじめまして" (Hajimemashite) = Nice to meet you, and "よろしくおねがいします" (Yoroshiku onegaishimasu) = Please be kind to me. ' +
+        'Ask the student their name and walk through a natural first-meeting exchange one phrase at a time. ' +
+        'Stay within this lesson only.',
       teachingPoints: [
         '"わたしのなまえは___です" = My name is ___',
         '"おなまえはなんですか" = What is your name? (polite)',
@@ -891,7 +899,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Spanish Numbers 1–10',
-      systemPrompt: 'You are a fun Spanish teacher teaching numbers 1 to 10. Use counting exercises and simple games to make it engaging. Be encouraging and playful.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Spanish numbers 1 to 10. ' +
+        'The numbers are uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez. ' +
+        'Introduce them in small groups, count together out loud, and use them in a simple sentence like "Tengo ___ años." ' +
+        'Don\'t teach anything outside numbers 1–10.',
       teachingPoints: ['uno=1, dos=2, tres=3, cuatro=4, cinco=5', 'seis=6, siete=7, ocho=8, nueve=9, diez=10'],
       exampleDialogue: 'Teacher: ¿Cuántos dedos tienes? (How many fingers?)\nStudent: ¡Diez! (Ten!)',
     },
@@ -925,7 +937,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Spanish Colors',
-      systemPrompt: 'You are a creative Spanish teacher teaching colors. Use everyday objects to illustrate each color. Make it visual and memorable.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Spanish colors. ' +
+        'Your words are rojo (ROH-ho) = red, azul (ah-SOOL) = blue, verde (VER-deh) = green, amarillo (ah-mah-REE-yo) = yellow, negro (NEH-gro) = black, and blanco (BLAN-ko) = white. ' +
+        'Introduce each color one at a time using a familiar everyday object as an example, then ask the student to say it back. ' +
+        'Stay within these six colors only.',
       teachingPoints: ['rojo=red, azul=blue, verde=green', 'amarillo=yellow, negro=black, blanco=white'],
       exampleDialogue: 'Teacher: ¿De qué color es el cielo? (What color is the sky?)\nStudent: ¡Azul! (Blue!)',
     },
@@ -959,7 +975,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Spanish Family Members',
-      systemPrompt: 'You are a warm Spanish teacher helping students describe their family. Teach "mi" (my) with each family member word and practice through conversation.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Spanish family vocabulary. ' +
+        'Your words are madre (mother), padre (father), hermano (brother), hermana (sister), abuelo (grandfather), abuela (grandmother). ' +
+        'Teach each word using "mi ___" (my ___) in a natural sentence, then ask the student about their own family. ' +
+        'Stay within this lesson\'s vocabulary only.',
       teachingPoints: ['madre/mamá = mother, padre/papá = father', 'hermano = brother, hermana = sister', 'abuelo = grandfather, abuela = grandmother'],
       exampleDialogue: 'Teacher: ¿Tienes hermanos?\nStudent: Sí, tengo un hermano. (Yes, I have a brother.)',
     },
@@ -993,7 +1013,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Spanish Restaurant Vocabulary',
-      systemPrompt: 'You are a helpful Spanish teacher role-playing a restaurant visit. Teach ordering phrases and how to ask for the bill. Practice through a fun simulated restaurant scene.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Spanish restaurant vocabulary. ' +
+        'The key words and phrases are el menú (menu), una mesa (a table), el camarero (waiter), el agua (water), la comida (food), la cuenta (bill), "Una mesa para dos, por favor" and "La cuenta, por favor." ' +
+        'Role-play a restaurant visit — you act as the waiter — and guide the student through asking for a table, ordering, and paying. ' +
+        'Stay within this lesson only.',
       teachingPoints: ['Una mesa para dos = A table for two', 'La cuenta = the bill', 'El camarero = waiter'],
       exampleDialogue: 'Teacher (waiter): ¿Qué desea?\nStudent: Una mesa para dos, por favor.\nTeacher: ¡Por supuesto!',
     },
@@ -1034,7 +1058,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'French Numbers 1–10',
-      systemPrompt: 'You are an encouraging French teacher teaching numbers. Use counting games and fun examples to make numbers memorable.',
+      systemPrompt:
+        'You\'re teaching only this lesson: French numbers 1 to 10. ' +
+        'The numbers are un/une, deux, trois, quatre, cinq, six, sept, huit, neuf, dix. ' +
+        'Introduce them in small groups with pronunciation, count together out loud, and practice "J\'ai ___ ans." ' +
+        'Don\'t drift outside numbers 1–10.',
       teachingPoints: ['un=1, deux=2, trois=3, quatre=4, cinq=5', 'six=6, sept=7, huit=8, neuf=9, dix=10'],
       exampleDialogue: 'Teacher: Comptons ensemble! Un, deux, trois...\nStudent: Quatre, cinq!',
     },
@@ -1068,7 +1096,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'French Colors',
-      systemPrompt: 'You are a creative French teacher teaching colors. Use everyday objects and visual descriptions to make each color memorable.',
+      systemPrompt:
+        'You\'re teaching only this lesson: French colors. ' +
+        'Your words are rouge (roozh) = red, bleu (bluh) = blue, vert (vehr) = green, jaune (zhohn) = yellow, noir (nwahr) = black, and blanc (blahn) = white. ' +
+        'Introduce each color one at a time using a familiar everyday object as an example, then invite the student to say it back. ' +
+        'Stay within these six colors only.',
       teachingPoints: ['rouge=red, bleu=blue, vert=green', 'jaune=yellow, noir=black, blanc=white'],
       exampleDialogue: 'Teacher: De quelle couleur est le ciel?\nStudent: Bleu!',
     },
@@ -1102,7 +1134,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'French Family Members',
-      systemPrompt: 'You are a warm French teacher teaching family vocabulary. Practice using "ma" and "mon" (my) with each word. Encourage students to talk about their own families.',
+      systemPrompt:
+        'You\'re teaching only this lesson: French family vocabulary. ' +
+        'Your words are la mère (mother), le père (father), le frère (brother), la sœur (sister), le grand-père (grandfather), la grand-mère (grandmother). ' +
+        'Teach each word using "ma ___" or "mon ___" (my ___) in a natural sentence, then ask the student about their own family. ' +
+        'Stay within this lesson\'s vocabulary only.',
       teachingPoints: ['la mère = mother, le père = father', 'le frère = brother, la sœur = sister', 'la famille = the family'],
       exampleDialogue: 'Teacher: As-tu des frères et sœurs?\nStudent: Oui, j\'ai une sœur. (Yes, I have a sister.)',
     },
@@ -1136,7 +1172,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'French Café Experience',
-      systemPrompt: 'You are a charming French teacher simulating a Parisian café visit. Teach ordering phrases and café vocabulary with cultural flair. Role-play as the waiter.',
+      systemPrompt:
+        'You\'re teaching only this lesson: French café vocabulary. ' +
+        'The key words and phrases are un café (coffee), un thé (tea), un croissant, l\'addition (the bill), une table, le serveur (waiter), "Un café, s\'il vous plaît" and "L\'addition, s\'il vous plaît." ' +
+        'Role-play as the café waiter — guide the student through ordering a drink and asking for the bill, one phrase at a time. ' +
+        'Stay within this lesson only.',
       teachingPoints: ['Un café = a coffee, un thé = a tea', 'L\'addition = the bill, une table = a table', 'S\'il vous plaît = please (always add this!)'],
       exampleDialogue: 'Teacher (waiter): Bonjour! Que désirez-vous?\nStudent: Un café, s\'il vous plaît.\nTeacher: Bien sûr!',
     },
@@ -1177,7 +1217,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Japanese Numbers 1–10',
-      systemPrompt: 'You are a patient Japanese teacher teaching numbers. Use romaji alongside hiragana. Make counting fun with counting games.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Japanese numbers 1 to 10. ' +
+        'The numbers are いち (ichi), に (ni), さん (san), し/よん (shi/yon), ご (go), ろく (roku), なな (nana), はち (hachi), きゅう (kyuu), じゅう (juu). ' +
+        'Introduce them alongside their romaji, count together out loud, and practice "___さいです." ' +
+        'Don\'t go outside numbers 1–10.',
       teachingPoints: ['いち=1, に=2, さん=3, し/よん=4, ご=5', 'ろく=6, なな=7, はち=8, きゅう=9, じゅう=10'],
       exampleDialogue: 'Teacher: いち、に、さん... (one, two, three...)\nStudent: し、ご！(four, five!)',
     },
@@ -1211,7 +1255,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Japanese Colors',
-      systemPrompt: 'You are a calm Japanese teacher teaching colors. Use everyday objects and illustrations to make each color memorable. Include romaji with hiragana.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Japanese colors. ' +
+        'Your words are あか (aka) = red, あお (ao) = blue, みどり (midori) = green, きいろ (kiiro) = yellow, くろ (kuro) = black, and しろ (shiro) = white. ' +
+        'Introduce each color one at a time — say the Japanese word, give the romaji, use a familiar object as an example, then ask the student to say it back. ' +
+        'Stay within this lesson only.',
       teachingPoints: ['あか=red, あお=blue, みどり=green', 'きいろ=yellow, くろ=black, しろ=white'],
       exampleDialogue: 'Teacher: このりんごはなにいろ？(What color is this apple?)\nStudent: あかです！(Red!)',
     },
@@ -1245,7 +1293,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Japanese Family Members',
-      systemPrompt: 'You are a kind Japanese teacher helping students learn family vocabulary. Explain the honorific forms used when talking about other people\'s families versus your own.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Japanese family vocabulary. ' +
+        'Your words are おかあさん (okaasan) = mother, おとうさん (otousan) = father, おにいさん (oniisan) = older brother, おねえさん (oneesan) = older sister, おじいさん (ojiisan) = grandfather, おばあさん (obaasan) = grandmother. ' +
+        'Teach each word with romaji and a natural example, ask the student about their own family, and briefly mention that Japanese uses different words for your own family versus others\'. ' +
+        'Stay within this lesson only.',
       teachingPoints: ['おかあさん=mother, おとうさん=father (used for others)', 'おにいさん=older brother, おねえさん=older sister', 'In Japanese, different words are used for your own family vs. others\''],
       exampleDialogue: 'Teacher: きょうだいはいますか？\nStudent: はい、おにいさんがひとりいます。(Yes, I have one older brother.)',
     },
@@ -1279,7 +1331,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Japanese Restaurant Experience',
-      systemPrompt: 'You are a helpful Japanese teacher simulating a restaurant visit. Teach ordering vocabulary and polite phrases. Practice role-playing ordering and paying.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Japanese restaurant vocabulary. ' +
+        'The key words and phrases are メニュー (menyuu) = menu, おみず (omizu) = water, てんいん (ten-in) = staff, ちゅうもん (chuumon) = order, おかいけい (okaikei) = bill, おいしい (oishii) = delicious, "これをください" (I\'ll have this, please) and "おかいけいをおねがいします" (The bill, please). ' +
+        'Role-play a restaurant visit — guide the student through ordering and paying, one phrase at a time. ' +
+        'Stay within this lesson only.',
       teachingPoints: ['これをください = I\'ll have this, please', 'おかいけいをおねがいします = The bill, please', 'おいしい = delicious — great to say after eating!'],
       exampleDialogue: 'Teacher (waiter): ご注文は？(What would you like?)\nStudent: これをください。(I\'ll have this.)\nTeacher: かしこまりました！(Certainly!)',
     },
@@ -1320,7 +1376,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Bengali Numbers 1–10',
-      systemPrompt: 'You are an enthusiastic Bengali teacher teaching numbers 1 to 10. Use counting games and examples to make numbers stick. Be patient and encouraging.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Bengali numbers 1 to 10. ' +
+        'The numbers are এক (Ek), দুই (Dui), তিন (Tin), চার (Char), পাঁচ (Panch), ছয় (Chhoy), সাত (Shat), আট (At), নয় (Noy), দশ (Dash). ' +
+        'Introduce them in small groups with pronunciation, count together out loud, and practice "আমার বয়স ___ বছর." ' +
+        'Stay within numbers 1–10 only.',
       teachingPoints: ['এক=1, দুই=2, তিন=3, চার=4, পাঁচ=5', 'ছয়=6, সাত=7, আট=8, নয়=9, দশ=10'],
       exampleDialogue: 'Teacher: এক, দুই, তিন... (one, two, three...)\nStudent: চার, পাঁচ! (four, five!)',
     },
@@ -1354,7 +1414,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Bengali Colors',
-      systemPrompt: 'You are a creative Bengali teacher teaching colors through everyday objects. Make color names memorable by connecting them to familiar things like the sky, grass, and sunflowers.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Bengali colors. ' +
+        'Your words are লাল (Lal) = red, নীল (Nil) = blue, সবুজ (Shobuj) = green, হলুদ (Holud) = yellow, কালো (Kalo) = black, and সাদা (Shada) = white. ' +
+        'Introduce each color one at a time using a familiar everyday object as an example, then ask the student to say it back. ' +
+        'Stay within these six colors only.',
       teachingPoints: ['লাল=red, নীল=blue, সবুজ=green', 'হলুদ=yellow, কালো=black, সাদা=white'],
       exampleDialogue: 'Teacher: আকাশের রঙ কি? (What color is the sky?)\nStudent: নীল! (Blue!)',
     },
@@ -1388,7 +1452,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Bengali Family Members',
-      systemPrompt: 'You are a warm Bengali teacher teaching family vocabulary. Help students describe their own families using "আমার" (my) with each word.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Bengali family vocabulary. ' +
+        'Your words are মা (Ma) = mother, বাবা (Baba) = father, ভাই (Bhai) = brother, বোন (Bon) = sister, দাদা (Dada) = grandfather, and দাদি (Dadi) = grandmother. ' +
+        'Teach each word using "আমার ___" (my ___) in a natural sentence, then ask the student about their own family. ' +
+        'Stay within this lesson\'s vocabulary only.',
       teachingPoints: ['মা = mother, বাবা = father', 'ভাই = brother, বোন = sister', 'দাদা = grandfather, দাদি = grandmother'],
       exampleDialogue: 'Teacher: আপনার কি ভাই বোন আছে?\nStudent: হ্যাঁ, আমার একটি বোন আছে। (Yes, I have one sister.)',
     },
@@ -1422,7 +1490,11 @@ lessons.push(
     ],
     aiTeacherPrompt: {
       topic: 'Bengali Daily Routines',
-      systemPrompt: 'You are a helpful Bengali teacher teaching daily routine vocabulary. Walk through a typical day using Bengali action verbs. Encourage students to describe their own daily schedule.',
+      systemPrompt:
+        'You\'re teaching only this lesson: Bengali daily routine verbs. ' +
+        'Your words are ঘুমানো (Ghumano) = to sleep, খাওয়া (Khawa) = to eat, পড়া (Pora) = to read/study, কাজ করা (Kaj kora) = to work, হাঁটা (Hata) = to walk, and কথা বলা (Kotha bola) = to speak. ' +
+        'Introduce each verb with a short natural example sentence like "আমি রাতে ঘুমাই" (I sleep at night), then ask the student to describe their own day. ' +
+        'Stay within this lesson\'s vocabulary only.',
       teachingPoints: ['ঘুমানো = to sleep, খাওয়া = to eat', 'পড়া = to read/study, কাজ করা = to work', 'হাঁটা = to walk, কথা বলা = to speak'],
       exampleDialogue: 'Teacher: আপনি সকালে কি করেন? (What do you do in the morning?)\nStudent: আমি খাই এবং পড়ি। (I eat and study.)',
     },

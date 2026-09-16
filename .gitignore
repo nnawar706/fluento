@@ -3,7 +3,7 @@
 # dependencies
 node_modules/
 .vscode
-prompts/
+.env
 
 # Expo
 .expo/
